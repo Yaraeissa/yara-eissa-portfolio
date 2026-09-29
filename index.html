@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yara Eissa · Junior Business Analyst</title>
+<meta name="description" content="Portfolio of Yara Eissa, Junior Business Analyst in Cairo. Case study: Safarny, a visa guidance platform for Egyptian travelers, from research to requirements, models, business case and Jira delivery.">
+<meta property="og:title" content="Yara Eissa · Junior Business Analyst">
+<meta property="og:description" content="BA case study: Safarny, making visa requirements clear for Egyptian travelers.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1026'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='%23a9b6ff' text-anchor='middle'%3EYE%3C/text%3E%3C/svg%3E">
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<style>
+/* Layout: a night-sky landing, then the case study on white paper scattered with navy stars.
+   Palette from Yara's five colours: #0b1026 ink, #1a2a4f secondary ink, #2f3c7e accent,
+   #a9b6ff periwinkle (stars, soft fills), #f2e8c9 cream (highlight tags).
+   Everything after the landing is one light look on purpose; the landing keeps its own dark --hero tokens. */
+:root{
+  color-scheme:light;
+  --paper:#ffffff; --surface:#f6f7fd; --ink:#0b1026; --ink-2:#1a2a4f; --muted:#5b6596;
+  --line:#d6dbf3; --accent:#2f3c7e; --accent-ink:#ffffff; --accent-soft:#e6e9ff; --gold:#7d5f16; --gold-soft:#f2e8c9;
+  --track:#e9ecfa; --bar-bg:rgba(255,255,255,.95);
+  --star-1:#1a2a4f; --star-2:#2f3c7e; --star-3:#a9b6ff;
+  /* landing */
+  --hero-bg:#0b1026; --hero-bg-2:#1a2a4f; --hero-nebula:#2f3c7e; --hero-ink:#f2e8c9; --hero-muted:#c9c3ad;
+  --hero-accent:#a9b6ff; --hero-line:rgba(169,182,255,.28);
+  --shadow:rgba(11,16,38,.14); --backdrop:rgba(11,16,38,.6);
+  --bar-h:56px;
+  --display:"Sora", "Segoe UI", system-ui, sans-serif;
+  --body:"Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", Consolas, "Courier New", monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;padding-inline:20px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0;font-weight:700}
+h2{font-size:clamp(1.45rem,2.6vw,1.85rem);letter-spacing:-.01em}
+h3{font-size:1.1rem}
+p{margin:0}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;height:calc(var(--bar-h) + env(safe-area-inset-top,0px));display:flex;justify-content:space-between;align-items:center;gap:20px;padding:env(safe-area-inset-top,0px) max(20px, calc((100% - 1160px) / 2)) 0;background:var(--bar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-size:.9rem;transform:translateY(-100%);visibility:hidden;transition:transform .35s ease,visibility 0s linear .35s}
+.topbar.show{transform:none;visibility:visible;transition:transform .35s ease}
+.topbar b a{font-family:var(--display);font-size:1.05rem;color:var(--ink);text-decoration:none}
+.topbar span{color:var(--ink-2)}
+.topbar nav{display:flex;gap:16px;flex-wrap:wrap}
+
+.shell{max-width:1160px;margin-inline:auto;display:grid;grid-template-columns:190px minmax(0,1fr);gap:56px;padding-block:44px 72px}
+nav.index{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar-h) + 28px);align-self:start;display:flex;flex-direction:column;gap:2px;font-size:.86rem}
+nav.index a{color:var(--ink-2);text-decoration:none;padding:4px 0 4px 12px;border-left:2px solid var(--line);display:flex;gap:8px}
+nav.index a span{font-family:var(--mono);font-size:.74rem;color:var(--muted);padding-top:2px}
+nav.index a:hover{color:var(--ink);border-left-color:var(--accent)}
+main{display:flex;flex-direction:column;gap:80px;min-width:0}
+section{display:flex;flex-direction:column;gap:24px;scroll-margin-top:calc(var(--bar-h) + 20px)}
+.sec-head{display:flex;flex-direction:column;gap:10px;max-width:70ch}
+.sec-head .label{color:var(--accent)}
+.sec-head p{color:var(--ink-2)}
+.lede{font-size:1.1rem;color:var(--ink-2);max-width:66ch}
+
+/* hero */
+.hero{display:flex;flex-direction:column;gap:22px}
+.kicker{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--gold-soft);color:var(--gold)}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.4rem);letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-block:1px solid var(--line);margin:0}
+.facts div{padding:14px 14px 14px 0;display:flex;flex-direction:column;gap:2px}
+.facts dd{margin:0;font-weight:600;font-size:.95rem}
+.facts dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:.76rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);background:var(--surface)}
+.note{font-size:.88rem;color:var(--muted);max-width:72ch}
+.glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.glance div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:8px;font-size:.94rem;color:var(--ink-2)}
+.glance b{font-family:var(--display);font-size:1.05rem;color:var(--ink)}
+
+/* generic cards/tables */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:10px;font-size:.93rem;color:var(--ink-2)}
+.card h3{color:var(--ink)}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table.spec{width:100%;border-collapse:collapse;font-size:.88rem;min-width:660px}
+table.spec th{text-align:left;font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:11px 14px;border-bottom:1px solid var(--line);background:var(--paper)}
+table.spec td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+table.spec tr:last-child td{border-bottom:0}
+table.spec td.id{font-family:var(--mono);font-size:.78rem;color:var(--accent);white-space:nowrap}
+table.spec td.main{color:var(--ink)}
+.src{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:1px 7px;border-radius:4px;background:var(--accent-soft);color:var(--accent);margin:0 4px 4px 0;white-space:nowrap}
+.pri{display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:500;padding:2px 8px;border-radius:4px;white-space:nowrap;border:1px solid transparent}
+.pri.must{background:var(--accent);color:var(--accent-ink)}
+.pri.should{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.pri.could{color:var(--ink-2);border-color:var(--line)}
+.pri.wont{color:var(--muted);border:1px dashed var(--muted)}
+.lvl{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:1px 7px;border-radius:4px;white-space:nowrap}
+.lvl.h{background:var(--gold-soft);color:var(--gold);font-weight:500}
+.lvl.m{border:1px solid var(--line);color:var(--ink-2)}
+.lvl.l{color:var(--muted)}
+
+/* diagrams */
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.dg-wrap{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;overflow-x:auto}
+.dg-wrap svg{display:block;width:100%;height:auto;min-width:640px}
+figcaption{font-size:.86rem;color:var(--ink-2);max-width:78ch}
+figcaption b{color:var(--ink)}
+.dg text{font-family:var(--body);font-size:13px;fill:var(--ink)}
+.dg .sm{font-size:11px;fill:var(--muted)}
+.dg .b{font-weight:600}
+.dg .ttl{font-family:var(--display);font-weight:700;font-size:15px}
+.dg .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-2)}
+.dg .box{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+.dg .hl{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.6}
+.dg .head{fill:var(--accent-soft);stroke:none}
+.dg .ln{stroke:var(--ink-2);stroke-width:1.3;fill:none}
+.dg .ln.dash{stroke-dasharray:5 4}
+.dg .lnA{stroke:var(--accent);stroke-width:1.6;fill:none}
+.dg .lnP{stroke:var(--gold);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.dg .grid{stroke:var(--line);stroke-width:1;fill:none}
+.dg .frame{fill:none;stroke:var(--muted);stroke-width:1.2}
+.dg .mk{fill:var(--ink-2)}
+.dg .mkA{fill:var(--accent)}
+.dg .mkP{fill:var(--gold)}
+.dg .dotA{fill:var(--accent)}
+.dg .dotO{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+.dg .pain{fill:var(--gold)}
+.dg .accent{fill:var(--accent)}
+.dg .gold{fill:var(--gold)}
+.dg .fillsurf{fill:var(--surface)}
+.dg .end{fill:var(--surface);stroke:var(--ink-2);stroke-width:3}
+.dg .start{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.3}
+.dg .gw{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.3}
+.dg .actor{stroke:var(--ink);stroke-width:1.5;fill:none}
+.dg .hit{fill:transparent}
+
+/* survey chart */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.chart-title{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline}
+.chart-title b{font-family:var(--display);font-size:1.05rem}
+.bars{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
+.bar-row{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:4px 14px;align-items:center}
+.bar-row .q{grid-column:1 / -1;font-size:.92rem;color:var(--ink-2)}
+.track{height:12px;background:var(--track);border-radius:0 4px 4px 0;position:relative}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:0 4px 4px 0}
+.bar-row:hover .fill{filter:brightness(1.12)}
+.val{font-family:var(--mono);font-size:.9rem;font-variant-numeric:tabular-nums;text-align:right}
+.chart-note{font-size:.8rem;color:var(--muted)}
+
+.persona{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:12px;font-size:.9rem;color:var(--ink-2)}
+.persona header{display:flex;flex-direction:column;gap:2px}
+.persona h3{color:var(--ink)}
+.persona blockquote{margin:0;padding-left:12px;border-left:2px solid var(--accent);font-style:italic;color:var(--ink)}
+.persona dl{margin:0;display:flex;flex-direction:column;gap:8px}
+.persona dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.persona dd{margin:1px 0 0}
+
+.gherkin{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.gherkin .story{font-size:.93rem;color:var(--ink)}
+.gherkin pre{margin:0;font-family:var(--mono);font-size:.8rem;line-height:1.75;color:var(--ink-2);white-space:pre-wrap}
+.gherkin pre b{color:var(--accent);font-weight:500}
+
+.numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.num .big{font-family:var(--display);font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.num .unit{font-size:.8rem;color:var(--muted)}
+.calc{font-family:var(--mono);font-size:.8rem;color:var(--ink-2);background:var(--surface);border:1px dashed var(--line);border-radius:8px;padding:14px 16px;line-height:1.8;overflow-x:auto;white-space:nowrap}
+
+/* business case */
+.bc-step{display:flex;flex-direction:column;gap:14px;padding-top:22px;border-top:1px solid var(--line)}
+.bc-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.bc-no{font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);padding:2px 8px;border-radius:4px}
+.bc-head h3{font-size:1.15rem}
+.bc-text{color:var(--ink-2);max-width:70ch}
+.bc-text b{color:var(--ink)}
+.bc-small{font-size:.86rem;color:var(--muted);max-width:72ch}
+table.money{width:100%;border-collapse:collapse;font-size:.88rem}
+table.money.wide{min-width:520px}
+table.money th{text-align:left;font-family:var(--mono);font-weight:500;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line);background:var(--paper)}
+table.money td{padding:8px 14px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+table.money th:last-child,table.money td:last-child{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.money td:last-child{color:var(--ink)}
+table.money tr:last-child td{border-bottom:0}
+table.money tr.sub td{color:var(--ink);font-weight:600;background:var(--paper)}
+table.money tr.tot td{color:var(--ink);font-weight:700;background:var(--accent-soft)}
+table.money td.neg{color:var(--gold)}
+table.money td.pos{color:var(--accent)}
+.formula{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.formula li{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:10px 14px;border-top:1px solid var(--line);font-size:.9rem}
+.formula li:first-child{border-top:0}
+.formula span{color:var(--ink-2)}
+.formula code{font-family:var(--mono);font-size:.82rem;color:var(--ink-2)}
+.formula b{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.formula li.tot{background:var(--accent-soft)}
+.formula li.tot span{color:var(--ink);font-weight:600}
+@media (max-width: 560px){.formula li{grid-template-columns:minmax(0,1fr) auto}.formula code{grid-column:1 / -1;grid-row:2}}
+
+/* jira */
+.jkey{font-family:var(--mono);font-size:.74rem;color:var(--accent);font-weight:500}
+.board-wrap{overflow-x:auto}
+.board{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:12px;min-width:720px}
+.col{background:var(--track);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:10px}
+.col-h{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);padding:2px 4px}
+.col-h b{font-weight:500;background:var(--surface);border-radius:999px;padding:0 8px}
+.jcard{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+.jcard p{color:var(--ink)}
+.jcard.done p{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.jmeta{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.jepic{font-family:var(--mono);font-size:.66rem;padding:1px 6px;border-radius:4px;background:var(--accent-soft);color:var(--accent)}
+.who{font-family:var(--mono);font-size:.66rem;color:var(--muted)}
+
+/* gantt */
+.gantt{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;overflow-x:auto}
+.g-inner{min-width:620px;display:flex;flex-direction:column;gap:8px}
+.g-row,.g-axis{display:grid;grid-template-columns:170px minmax(0,1fr) 60px;gap:12px;align-items:center;font-size:.88rem}
+.g-row .dur{font-family:var(--mono);font-size:.78rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.g-lane{position:relative;height:14px;border-left:1px solid var(--line)}
+.g-bar{position:absolute;top:0;bottom:0;background:var(--accent);border-radius:3px}
+.g-bar.ba{background:var(--gold)}
+.g-ticks{position:relative;height:18px;border-left:1px solid var(--line)}
+.g-ticks span{position:absolute;top:0;font-family:var(--mono);font-size:.7rem;color:var(--muted);padding-left:4px;border-left:1px solid var(--line);height:18px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-2);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:6px}
+
+.canvas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:.84rem}
+.canvas > div{background:var(--surface);padding:12px;display:flex;flex-direction:column;gap:6px;color:var(--ink-2)}
+.canvas .label{color:var(--accent)}
+.c-kp{grid-column:1;grid-row:1 / 3}.c-ka{grid-column:2;grid-row:1}.c-kr{grid-column:2;grid-row:2}
+.c-vp{grid-column:3;grid-row:1 / 3}.c-cr{grid-column:4;grid-row:1}.c-ch{grid-column:4;grid-row:2}
+.c-cs{grid-column:5;grid-row:1 / 3}.c-cost{grid-column:1 / 4;grid-row:3}.c-rev{grid-column:4 / 6;grid-row:3}
+
+.roadmap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.roadmap > div{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:3px solid var(--accent);font-size:.92rem;color:var(--ink-2)}
+.roadmap > div:nth-child(2){border-top-color:var(--gold)}
+.roadmap > div:nth-child(3){border-top-color:var(--line)}
+.roadmap ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.roadmap b{font-family:var(--display);color:var(--ink);font-size:1.02rem}
+
+.contact{background:var(--accent);color:var(--gold-soft);border-radius:10px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.contact h2{color:var(--gold-soft)}
+.contact p{max-width:60ch;opacity:.9}
+.contact dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0;max-width:640px}
+.contact dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--star-3)}
+.contact dd{margin:2px 0 0;font-weight:600;word-break:break-word}
+.contact a{color:var(--star-3)}
+
+/* business case summary */
+.chain{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.chain li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.chain li b{font-family:var(--display);font-size:1.45rem;font-variant-numeric:tabular-nums}
+.chain li > span:last-child{font-size:.8rem;color:var(--muted)}
+.chain li:not(:last-child)::after{content:"→";position:absolute;right:-6px;top:50%;transform:translate(50%,-50%);color:var(--muted);font-size:.9rem;z-index:1}
+.chain li.end{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chain li.end .label,.chain li.end > span:last-child{color:var(--accent-ink);opacity:.85}
+.calc-box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.calc-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.calc-grid{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:24px;align-items:start}
+.controls{display:flex;flex-direction:column;gap:8px}
+.controls label{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;color:var(--ink-2)}
+.controls output{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.controls input[type=range]{width:100%;accent-color:var(--accent);margin:0 0 10px;height:28px;cursor:pointer}
+.controls label.check{justify-content:flex-start;align-items:center;gap:8px;cursor:pointer;margin-bottom:6px}
+.controls input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+.results{margin:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.results div{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-top:1px solid var(--line);font-size:.88rem}
+.results div:first-child{border-top:0}
+.results dt{color:var(--ink-2)}
+.results dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.results .hl-res{background:var(--accent);}
+.results .hl-res dt,.results .hl-res dd{color:var(--accent-ink);font-weight:600}
+.calc-chart svg{display:block;width:100%;height:auto}
+.btn-sm{font:inherit;font-size:.82rem;padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--accent);cursor:pointer}
+.btn-sm:hover{background:var(--line)}
+.btn-sm[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details.more{border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+details.more summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"+";font-family:var(--mono);color:var(--accent);font-size:1.1rem}
+details.more[open] summary::after{content:"−"}
+details.more[open] summary{border-bottom:1px solid var(--line)}
+details.more .canvas{border:0;border-radius:0 0 8px 8px}
+
+/* interactivity */
+nav.index a.active{color:var(--ink);border-left-color:var(--accent);font-weight:600}
+nav.index a.active span{color:var(--accent)}
+.mnav{display:none}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters .search{flex:1 1 200px;max-width:320px;font:inherit;font-size:.88rem;padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.filters .count{font-size:.8rem;color:var(--muted);margin-left:auto}
+.empty-row td{text-align:center;color:var(--muted);font-style:italic}
+.dg-wrap{position:relative}
+.expand{align-self:flex-end;margin-bottom:-4px;font:inherit;font-size:.76rem;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);cursor:pointer;z-index:1}
+.expand:hover{border-color:var(--accent);color:var(--accent)}
+dialog.viewer{width:min(1200px,calc(100vw - 24px));max-height:calc(100vh - 24px);padding:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+dialog.viewer::backdrop{background:var(--backdrop)}
+.viewer-bar{position:sticky;top:0;display:flex;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface);z-index:1}
+.viewer-bar b{margin-right:auto;font-family:var(--display)}
+.viewer-body{overflow:auto;padding:16px;max-height:calc(100vh - 90px)}
+.viewer-body svg{display:block;height:auto}
+.backtop{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:15;width:48px;height:48px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid var(--accent);background:var(--ink-2);color:var(--star-3);cursor:pointer;box-shadow:0 6px 18px var(--shadow);opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s,transform .25s,visibility 0s linear .25s,background .2s}
+.backtop svg{width:20px;height:20px}
+.backtop.show{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .25s,background .2s}
+.backtop:hover{background:var(--accent)}
+.backtop:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.backtop,.backtop.show{transition:none;transform:none}}
+
+.cv-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:6px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-weight:600;text-decoration:none;transition:background .2s,color .2s}
+.cv-btn:hover{background:var(--accent-soft)}
+.cv-btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.contact .cv-btn{border-color:var(--star-3);color:var(--star-3)}
+.contact .cv-btn:hover{background:var(--star-3);color:var(--accent)}
+.contact .cv-btn:focus-visible{outline-color:var(--gold-soft)}
+dialog.cv-viewer{width:min(900px,calc(100vw - 24px))}
+.cv-dl{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;padding:6px 12px;border-radius:6px;background:var(--accent);color:var(--accent-ink);text-decoration:none;white-space:nowrap}
+.cv-dl:hover{background:var(--ink-2)}
+.cv-dl svg{width:15px;height:15px}
+.cv-dl:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cv-viewer .viewer-bar b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-body{display:flex;flex-direction:column;align-items:center;gap:16px;background:var(--track)}
+.cv-body canvas{display:block;width:100%;max-width:820px;height:auto;background:var(--paper);box-shadow:0 4px 16px var(--shadow)}
+.cv-status{padding:40px 16px;color:var(--ink-2);text-align:center}
+
+@media (max-width: 980px){
+  .mnav{display:flex;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar-h));z-index:5;gap:6px;overflow-x:auto;padding:10px 20px;margin-inline:-20px;background:var(--surface);border-bottom:1px solid var(--line);scrollbar-width:none}
+  .mnav::-webkit-scrollbar{display:none}
+  .mnav a{flex:none;font-size:.8rem;text-decoration:none;color:var(--ink-2);padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);white-space:nowrap}
+  .mnav a.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  section{scroll-margin-top:calc(var(--bar-h) + 64px)}
+  .chain{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chain li:nth-child(2)::after{display:none}
+  .calc-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width: 640px){
+  .chain{grid-template-columns:minmax(0,1fr)}
+  .chain li::after{display:none}
+  .hero h1{font-size:2.3rem}
+  .shell{padding-block:28px 56px}
+  table.spec,table.money.wide{min-width:0}
+  table.spec thead,table.money thead{display:none}
+  table.spec tr,table.money tr{display:block;padding:10px 14px;border-bottom:1px solid var(--line)}
+  table.spec tr:last-child,table.money tr:last-child{border-bottom:0}
+  table.spec td,table.money td{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;padding:3px 0;border:0;text-align:left !important}
+  table.spec td::before,table.money td::before{content:attr(data-label);font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+  table.spec td:empty,table.money td:empty{display:none}
+  table.money tr.tot,table.money tr.sub{background:var(--accent-soft)}
+  .table-wrap{overflow:visible}
+  .filters .count{margin-left:0;width:100%}
+}
+@media (max-width: 980px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0}
+  nav.index{display:none}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .numbers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .canvas{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .canvas > div{grid-column:auto !important;grid-row:auto !important}
+  .canvas .c-vp,.canvas .c-cost,.canvas .c-rev{grid-column:1 / -1 !important}
+}
+@media (max-width: 760px){
+  .glance,.grid2,.grid3,.roadmap,.contact dl{grid-template-columns:minmax(0,1fr)}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .contact{padding:24px}
+  main{gap:64px}
+}
+
+
+/* navy star field behind everything after the landing */
+body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+body::before{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="380" height="380"%3E%3Ccircle cx="124.5" cy="60.1" r="0.6" fill="%231a2a4f" fill-opacity="0.4"/%3E%3Ccircle cx="39.0" cy="220.8" r="0.9" fill="%231a2a4f" fill-opacity="0.2"/%3E%3Ccircle cx="159.6" cy="93.5" r="1.3" fill="%231a2a4f" fill-opacity="0.4"/%3E%3Ccircle cx="50.1" cy="87.0" r="0.6" fill="%23a9b6ff" fill-opacity="0.34"/%3E%3Ccircle cx="22.4" cy="86.2" r="0.8" fill="%232f3c7e" fill-opacity="0.29"/%3E%3Ccircle cx="205.1" cy="216.4" r="0.8" fill="%231a2a4f" fill-opacity="0.34"/%3E%3Ccircle cx="241.7" cy="142.5" r="0.7" fill="%23a9b6ff" fill-opacity="0.2"/%3E%3Ccircle cx="80.6" cy="257.1" r="1.3" fill="%232f3c7e" fill-opacity="0.31"/%3E%3Ccircle cx="347.5" cy="138.5" r="0.9" fill="%231a2a4f" fill-opacity="0.37"/%3E%3Ccircle cx="94.8" cy="217.7" r="1.6" fill="%232f3c7e" fill-opacity="0.38"/%3E%3Ccircle cx="111.1" cy="368.6" r="0.7" fill="%23a9b6ff" fill-opacity="0.29"/%3E%3Ccircle cx="285.7" cy="60.5" r="1.6" fill="%232f3c7e" fill-opacity="0.19"/%3E%3Ccircle cx="252.6" cy="288.4" r="1.1" fill="%232f3c7e" fill-opacity="0.37"/%3E%3Ccircle cx="225.1" cy="219.7" r="1.6" fill="%231a2a4f" fill-opacity="0.41"/%3E%3Ccircle cx="355.4" cy="180.4" r="0.7" fill="%231a2a4f" fill-opacity="0.38"/%3E%3Ccircle cx="119.2" cy="219.0" r="1.6" fill="%232f3c7e" fill-opacity="0.37"/%3E%3Ccircle cx="334.0" cy="133.1" r="1.6" fill="%232f3c7e" fill-opacity="0.23"/%3E%3Ccircle cx="47.6" cy="25.9" r="1" fill="%231a2a4f" fill-opacity="0.38"/%3E%3Ccircle cx="152.0" cy="345.1" r="1.6" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="153.4" cy="107.4" r="0.8" fill="%232f3c7e" fill-opacity="0.41"/%3E%3Ccircle cx="107.6" cy="158.5" r="1.1" fill="%232f3c7e" fill-opacity="0.44"/%3E%3Ccircle cx="60.1" cy="69.6" r="0.9" fill="%231a2a4f" fill-opacity="0.18"/%3E%3Ccircle cx="313.2" cy="71.8" r="1" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="202.9" cy="230.9" r="1.1" fill="%231a2a4f" fill-opacity="0.37"/%3E%3Ccircle cx="195.8" cy="233.7" r="0.6" fill="%232f3c7e" fill-opacity="0.42"/%3E%3Ccircle cx="294.1" cy="329.3" r="1.3" fill="%232f3c7e" fill-opacity="0.29"/%3E%3Ccircle cx="42.5" cy="240.0" r="0.6" fill="%231a2a4f" fill-opacity="0.2"/%3E%3Ccircle cx="81.7" cy="64.4" r="1.1" fill="%23a9b6ff" fill-opacity="0.19"/%3E%3Ccircle cx="4.1" cy="60.3" r="0.7" fill="%232f3c7e" fill-opacity="0.35"/%3E%3Ccircle cx="30.2" cy="81.4" r="1.3" fill="%231a2a4f" fill-opacity="0.35"/%3E%3Ccircle cx="359.4" cy="228.0" r="1.6" fill="%231a2a4f" fill-opacity="0.21"/%3E%3Ccircle cx="185.6" cy="367.8" r="1.6" fill="%232f3c7e" fill-opacity="0.26"/%3E%3Ccircle cx="57.6" cy="282.9" r="1" fill="%232f3c7e" fill-opacity="0.4"/%3E%3Ccircle cx="64.1" cy="12.6" r="1.1" fill="%231a2a4f" fill-opacity="0.37"/%3E%3Cpath d="M337.4,277.2 Q337.4,281.9 342.2,281.9 Q337.4,281.9 337.4,286.6 Q337.4,281.9 332.7,281.9 Q337.4,281.9 337.4,277.2Z" fill="%232f3c7e" fill-opacity=".38"/%3E%3Cpath d="M259.8,100.0 Q259.8,105.0 264.8,105.0 Q259.8,105.0 259.8,109.9 Q259.8,105.0 254.9,105.0 Q259.8,105.0 259.8,100.0Z" fill="%232f3c7e" fill-opacity=".38"/%3E%3C/svg%3E'),url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="530" height="530"%3E%3Ccircle cx="90.1" cy="364.1" r="1" fill="%232f3c7e" fill-opacity="0.41"/%3E%3Ccircle cx="520.6" cy="251.8" r="0.8" fill="%23a9b6ff" fill-opacity="0.32"/%3E%3Ccircle cx="415.5" cy="11.4" r="1.3" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="396.2" cy="485.0" r="0.6" fill="%232f3c7e" fill-opacity="0.45"/%3E%3Ccircle cx="389.6" cy="460.8" r="1.6" fill="%231a2a4f" fill-opacity="0.44"/%3E%3Ccircle cx="286.0" cy="366.2" r="1.1" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="430.7" cy="69.2" r="0.6" fill="%232f3c7e" fill-opacity="0.22"/%3E%3Ccircle cx="384.3" cy="213.5" r="0.8" fill="%231a2a4f" fill-opacity="0.36"/%3E%3Ccircle cx="249.3" cy="432.1" r="0.7" fill="%231a2a4f" fill-opacity="0.24"/%3E%3Ccircle cx="509.7" cy="470.7" r="0.7" fill="%231a2a4f" fill-opacity="0.33"/%3E%3Ccircle cx="295.8" cy="206.5" r="1.1" fill="%231a2a4f" fill-opacity="0.42"/%3E%3Ccircle cx="217.8" cy="194.6" r="1.6" fill="%23a9b6ff" fill-opacity="0.28"/%3E%3Ccircle cx="523.3" cy="205.8" r="0.6" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="377.8" cy="516.8" r="0.6" fill="%232f3c7e" fill-opacity="0.2"/%3E%3Ccircle cx="316.9" cy="276.6" r="1.1" fill="%23a9b6ff" fill-opacity="0.44"/%3E%3Ccircle cx="62.8" cy="353.6" r="1.1" fill="%232f3c7e" fill-opacity="0.27"/%3E%3Ccircle cx="315.8" cy="164.1" r="0.7" fill="%231a2a4f" fill-opacity="0.2"/%3E%3Ccircle cx="428.7" cy="409.6" r="1.1" fill="%231a2a4f" fill-opacity="0.36"/%3E%3Ccircle cx="356.8" cy="473.1" r="0.9" fill="%232f3c7e" fill-opacity="0.43"/%3E%3Ccircle cx="89.1" cy="391.3" r="0.6" fill="%232f3c7e" fill-opacity="0.31"/%3E%3Ccircle cx="200.0" cy="133.0" r="0.9" fill="%231a2a4f" fill-opacity="0.33"/%3E%3Ccircle cx="233.3" cy="216.7" r="1.6" fill="%231a2a4f" fill-opacity="0.41"/%3E%3Cpath d="M38.4,137.8 Q38.4,142.5 43.1,142.5 Q38.4,142.5 38.4,147.3 Q38.4,142.5 33.7,142.5 Q38.4,142.5 38.4,137.8Z" fill="%231a2a4f" fill-opacity=".38"/%3E%3Cpath d="M137.8,205.5 Q137.8,211.6 144.0,211.6 Q137.8,211.6 137.8,217.8 Q137.8,211.6 131.6,211.6 Q137.8,211.6 137.8,205.5Z" fill="%232f3c7e" fill-opacity=".38"/%3E%3C/svg%3E');background-size:380px 380px,530px 530px;background-position:0 0,190px 120px;opacity:.2}
+body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="460" height="460"%3E%3Ccircle cx="285.6" cy="339.3" r="0.6" fill="%232f3c7e" fill-opacity="0.39"/%3E%3Ccircle cx="116.6" cy="27.4" r="0.8" fill="%231a2a4f" fill-opacity="0.28"/%3E%3Ccircle cx="396.5" cy="176.1" r="0.7" fill="%23a9b6ff" fill-opacity="0.25"/%3E%3Ccircle cx="334.5" cy="188.5" r="0.8" fill="%232f3c7e" fill-opacity="0.22"/%3E%3Ccircle cx="364.3" cy="66.7" r="1.6" fill="%231a2a4f" fill-opacity="0.22"/%3E%3Ccircle cx="443.5" cy="6.4" r="0.9" fill="%231a2a4f" fill-opacity="0.42"/%3E%3Cpath d="M138.1,425.9 Q138.1,431.2 143.5,431.2 Q138.1,431.2 138.1,436.6 Q138.1,431.2 132.8,431.2 Q138.1,431.2 138.1,425.9Z" fill="%232f3c7e" fill-opacity=".38"/%3E%3Cpath d="M91.2,429.8 Q91.2,434.3 95.7,434.3 Q91.2,434.3 91.2,438.8 Q91.2,434.3 86.7,434.3 Q91.2,434.3 91.2,429.8Z" fill="%231a2a4f" fill-opacity=".38"/%3E%3Cpath d="M142.3,165.1 Q142.3,169.5 146.7,169.5 Q142.3,169.5 142.3,173.9 Q142.3,169.5 137.9,169.5 Q142.3,169.5 142.3,165.1Z" fill="%232f3c7e" fill-opacity=".38"/%3E%3C/svg%3E');background-size:460px 460px;background-position:80px 260px;animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.06}to{opacity:.22}}
+
+/* landing: outer space */
+.landing{position:relative;isolation:isolate;overflow:hidden;margin-inline:-20px;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:96px;background:linear-gradient(180deg, var(--hero-bg) 0%, var(--hero-bg-2) 100%);color:var(--hero-ink)}
+.landing-nebula{position:absolute;inset:-25%;z-index:-2;pointer-events:none;background:radial-gradient(34% 28% at 32% 38%, var(--hero-nebula), transparent 72%),radial-gradient(30% 34% at 70% 62%, var(--hero-nebula), transparent 70%);opacity:.55;filter:blur(30px);animation:drift 30s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate3d(-3%,-2%,0) scale(1)}50%{transform:translate3d(2%,2%,0) scale(1.06)}100%{transform:translate3d(-1%,3%,0) scale(1.02)}}
+.landing-stars{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+
+.landing-inner{width:100%;max-width:880px;margin-inline:auto;padding-inline:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:18px}
+.landing-inner > *{animation:rise .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(.15s + var(--d) * .13s)}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.landing-kicker{font-family:var(--mono);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--hero-muted)}
+.landing h1{font-family:var(--display);font-size:clamp(3.2rem,12vw,8.5rem);line-height:.95;letter-spacing:-.035em;color:var(--hero-ink);text-shadow:0 0 40px var(--hero-bg)}
+.landing-role{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:clamp(.9rem,1.6vw,1.1rem);letter-spacing:.22em;text-transform:uppercase;color:var(--hero-accent)}
+.landing-role::before,.landing-role::after{content:"";width:32px;height:1px;background:var(--hero-accent)}
+.landing-tag{font-size:clamp(.8rem,3.4vw,1.45rem);line-height:1.45;white-space:nowrap;color:var(--hero-ink)}
+@media (max-width: 340px){.landing-tag{white-space:normal}}
+.landing-actions{margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.landing .cv-btn{border-color:var(--hero-accent);color:var(--hero-accent);padding-block:11.5px}
+.landing .cv-btn:hover{background:var(--hero-nebula)}
+.landing-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:6px;background:var(--hero-accent);color:var(--hero-bg);font-weight:600;text-decoration:none;transition:background .2s,transform .2s}
+.landing-cta:hover{background:var(--hero-ink);transform:translateY(-2px)}
+.landing a:focus-visible{outline:2px solid var(--hero-accent);outline-offset:4px}
+.landing-arrow{position:absolute;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--hero-line);border-radius:50%;color:var(--hero-accent)}
+.landing-arrow:hover{border-color:var(--hero-accent);background:var(--hero-nebula)}
+.landing-arrow svg{width:18px;height:18px;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-4px);opacity:.55}50%{transform:translateY(4px);opacity:1}}
+
+/* sections fade and slide in */
+.js-reveal .reveal{transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js-reveal .reveal:not(.in){opacity:0;transform:translateY(28px)}
+
+@media (max-width: 640px){
+  .topbar nav{display:none}
+  .landing-inner{gap:14px}
+  .landing-role{gap:10px;letter-spacing:.18em}
+  .landing-role::before,.landing-role::after{width:20px}
+}
+@media (max-width: 420px){
+  .landing-role{letter-spacing:.14em}
+  .landing-role::before,.landing-role::after{display:none}
+  .landing-arrow{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion: reduce){
+  .landing *,.landing-nebula,body::after{animation:none!important}
+  .topbar,.topbar.show,.js-reveal .reveal,.landing-cta{transition:none}
+  .js-reveal .reveal:not(.in){opacity:1;transform:none}
+}
+</style>
+
+<section class="landing" id="top" aria-label="Introduction">
+  <div class="landing-nebula" aria-hidden="true"></div>
+  <canvas class="landing-stars" id="stars" aria-hidden="true"></canvas>
+  <div class="landing-inner">
+    <p class="landing-kicker" style="--d:0">Portfolio · Cairo, Egypt</p>
+    <h1 style="--d:1">Yara Eissa</h1>
+    <p class="landing-role" style="--d:2">Junior Business Analyst</p>
+    <p class="landing-tag" style="--d:3">Curious about problems, careful with solutions.</p>
+    <div class="landing-actions" style="--d:4">
+      <a class="landing-cta" href="#overview" data-scroll>BA case study <span aria-hidden="true">↓</span></a>
+      <a class="cv-btn" href="Yara-Eissa-CV.pdf" data-cv>View my CV</a>
+    </div>
+  </div>
+  <a class="landing-arrow" href="#overview" data-scroll aria-label="Scroll down to the BA case study">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg>
+  </a>
+</section>
+
+<header class="topbar" id="topbar">
+  <div><b><a href="#top" data-scroll>Yara Eissa</a></b> <span>· Junior Business Analyst</span></div>
+  <nav><span>yara.eissa.w@gmail.com</span><a href="https://www.linkedin.com/in/yara-eissa-" target="_blank" rel="noopener">LinkedIn</a></nav>
+</header>
+
+<div class="shell">
+  <nav class="mnav" aria-label="Jump to section">
+    <a href="#overview">Overview</a><a href="#problem">Problem</a><a href="#stakeholders">Stakeholders</a><a href="#discovery">Discovery</a><a href="#process">As-is / to-be</a><a href="#scope">Scope</a><a href="#backlog">Requirements</a><a href="#models">Models</a><a href="#business-case">Business case</a><a href="#risks">Risks</a><a href="#delivery">Jira</a><a href="#outcome">Outcome</a>
+  </nav>
+  <nav class="index" aria-label="Case study sections">
+    <span class="label" style="margin-bottom:8px">Case study</span>
+    <a href="#overview"><span>00</span>Overview</a>
+    <a href="#problem"><span>01</span>Problem &amp; goals</a>
+    <a href="#stakeholders"><span>02</span>Stakeholders</a>
+    <a href="#discovery"><span>03</span>Discovery</a>
+    <a href="#process"><span>04</span>As-is / to-be</a>
+    <a href="#scope"><span>05</span>Scope</a>
+    <a href="#backlog"><span>06</span>Requirements</a>
+    <a href="#models"><span>07</span>System models</a>
+    <a href="#business-case"><span>08</span>Business case</a>
+    <a href="#risks"><span>09</span>Risks</a>
+    <a href="#delivery"><span>10</span>Delivery &amp; Jira</a>
+    <a href="#outcome"><span>11</span>Outcome</a>
+  </nav>
+
+  <main>
+    <!-- 00 OVERVIEW -->
+    <section id="overview" class="hero">
+      <div class="kicker"><span class="tag">Business analysis case study</span></div>
+      <h1>Safarny: making visa requirements <em>clear</em> for Egyptian travelers</h1>
+      <p class="lede">A web and mobile platform that tells travelers which visa they need, which documents to prepare and where to get them in Egypt, then checks their documents and books the embassy appointment.</p>
+      <dl class="facts">
+        <div><dt>My role</dt><dd>Project lead &amp; BA</dd></div>
+        <div><dt>Team</dt><dd>6 people</dd></div>
+        <div><dt>Timeline</dt><dd>Oct 2023 – Mar 2024</dd></div>
+        <div><dt>Domain</dt><dd>Travel &amp; visas</dd></div>
+        <div><dt>Research</dt><dd>31 surveys · 3 interviews</dd></div>
+      </dl>
+      <div class="glance">
+        <div><span class="label">Problem</span><b>Visa rules are scattered and confusing</b>74% of surveyed travelers rated visa requirements 3 out of 5 or lower for clarity. Mistakes lead to rejections and missed trips.</div>
+        <div><span class="label">What I did</span><b>Took it from research to a buildable design</b>Led elicitation, wrote the requirements, modeled processes and data, sized the cost and planned delivery for a 6-person team.</div>
+        <div><span class="label">Result</span><b>A validated, costed solution</b>96.8% of respondents wanted this product. A working website prototype was built on the design, with break-even forecast in month 8.</div>
+      </div>
+      <div class="chips" aria-label="Deliverables">
+        <span class="chip">Stakeholder map</span><span class="chip">Personas</span><span class="chip">BPMN as-is / to-be</span><span class="chip">Gap analysis</span><span class="chip">Context diagram</span><span class="chip">User stories + Gherkin</span><span class="chip">MoSCoW backlog</span><span class="chip">Traceability</span><span class="chip">UML use case &amp; sequence</span><span class="chip">ERD</span><span class="chip">Business case</span><span class="chip">Risk register</span><span class="chip">Gantt plan</span><span class="chip">Jira epics &amp; sprints</span>
+      </div>
+      <p class="note">Originally delivered in 2024 as a BRD with UML models and user stories with acceptance criteria. Revisited in 2026 with the artifacts BA teams use today: BPMN, MoSCoW prioritization, measurable NFRs and KPIs. <b>Every diagram on this page has been redrawn.</b></p>
+    </section>
+
+    <!-- 01 PROBLEM -->
+    <section id="problem">
+      <div class="sec-head">
+        <span class="label">01 · Problem &amp; goals</span>
+        <h2>The traveler carries all the risk of getting the paperwork wrong</h2>
+        <p>The United States alone has around 20 visa types. Egyptian travelers piece together rules from embassy sites, forums, agencies and social media. Wrong submissions lead to rejections, and agency staff spend their time explaining the same rules again and again.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="spec">
+          <thead><tr><th>Success metric</th><th>Baseline</th><th>Target</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td class="main">Travelers rating visa information clear (4–5 of 5)</td><td>25.8%</td><td>Measure after launch; aim for a majority</td><td><span class="src">Survey</span></td></tr>
+            <tr><td class="main">Paying subscribers</td><td>0</td><td>200 in month 1</td><td><span class="src">Business case</span></td></tr>
+            <tr><td class="main">Break-even on total system cost</td><td>292,329 EGP cost</td><td>By month 8</td><td><span class="src">Business case</span></td></tr>
+            <tr><td class="main">Appointments booked through Safarny</td><td>Not possible today</td><td>Track weekly from launch</td><td><span class="src">INT-1</span><span class="src">Survey 87.1%</span></td></tr>
+            <tr><td class="main">Document checklists completed before booking</td><td>No checklist exists</td><td>Track completion rate</td><td><span class="src">INT-2</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 02 STAKEHOLDERS -->
+    <section id="stakeholders">
+      <div class="sec-head">
+        <span class="label">02 · Stakeholders</span>
+        <h2>Nine stakeholder groups, four ways to engage them</h2>
+        <p>I identified five primary and four secondary stakeholders and placed them on an influence/interest grid. That grid decided who we interviewed first and who only needed updates.</p>
+      </div>
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 640 420" role="img" aria-label="Stakeholder influence and interest grid. Applicants, travel agencies and system admins are managed closely; embassies and investors are kept satisfied; developers and marketing are kept informed; tourism authorities and airlines and hotels are monitored.">
+            <rect class="grid" x="60" y="20" width="560" height="360"/>
+            <line class="grid" x1="340" y1="20" x2="340" y2="380"/>
+            <line class="grid" x1="60" y1="200" x2="620" y2="200"/>
+            <text class="sm" x="72" y="40">KEEP SATISFIED</text>
+            <text class="sm" x="608" y="40" text-anchor="end">MANAGE CLOSELY</text>
+            <text class="sm" x="72" y="370">MONITOR</text>
+            <text class="sm" x="608" y="370" text-anchor="end">KEEP INFORMED</text>
+            <text class="sm" x="340" y="404" text-anchor="middle">Interest in the system →</text>
+            <text class="sm" x="30" y="200" text-anchor="middle" transform="rotate(-90 30 200)">Influence on the system →</text>
+            <circle class="dotA" cx="590" cy="64" r="6"/><text x="578" y="68" text-anchor="end">Applicants</text>
+            <circle class="dotA" cx="470" cy="110" r="6"/><text x="480" y="114">Travel agencies</text>
+            <circle class="dotA" cx="590" cy="160" r="6"/><text x="578" y="164" text-anchor="end">System admins</text>
+            <circle class="dotA" cx="250" cy="64" r="6"/><text x="260" y="68">Embassies</text>
+            <circle class="dotO" cx="150" cy="140" r="6"/><text x="160" y="144">Investors</text>
+            <circle class="dotA" cx="430" cy="258" r="6"/><text x="440" y="262">Developers &amp; support</text>
+            <circle class="dotO" cx="560" cy="324" r="6"/><text x="548" y="328" text-anchor="end">Marketing team</text>
+            <circle class="dotO" cx="120" cy="250" r="6"/><text x="130" y="254">Tourism authorities</text>
+            <circle class="dotO" cx="190" cy="322" r="6"/><text x="200" y="326">Airlines &amp; hotels</text>
+          </svg>
+        </div>
+        <figcaption><b>Influence / interest grid.</b> Filled dots are primary stakeholders, hollow dots are secondary. Embassies have high influence as the source of truth for visa rules, but little direct interest in the product, so they are kept satisfied rather than managed closely.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 03 DISCOVERY -->
+    <section id="discovery">
+      <div class="sec-head">
+        <span class="label">03 · Discovery</span>
+        <h2>A survey to size the problem, interviews to understand it</h2>
+        <p>31 people answered the questionnaire. Three structured interviews covered a frequent business traveler, a student who had been refused a US visa, and a travel agency. I turned each interview into a persona.</p>
+      </div>
+      <div class="chart" role="figure" aria-label="Questionnaire results, share of 31 respondents">
+        <div class="chart-title"><b>What travelers told us</b><span class="label">n = 31</span></div>
+        <ul class="bars">
+          <li class="bar-row" title="30 of 31 respondents"><span class="q">Want visa types and required documents in one place</span><span class="track"><span class="fill" style="width:96.8%"></span></span><span class="val">96.8%</span></li>
+          <li class="bar-row" title="27 of 31 respondents"><span class="q">Would trust an app to book their embassy appointment</span><span class="track"><span class="fill" style="width:87.1%"></span></span><span class="val">87.1%</span></li>
+          <li class="bar-row" title="23 of 31 respondents"><span class="q">Rate visa requirements 3 out of 5 or lower for clarity</span><span class="track"><span class="fill" style="width:74.2%"></span></span><span class="val">74.2%</span></li>
+          <li class="bar-row" title="22 of 31 respondents"><span class="q">Always or often research visa requirements online</span><span class="track"><span class="fill" style="width:71%"></span></span><span class="val">71.0%</span></li>
+          <li class="bar-row" title="18 of 31 respondents"><span class="q">Plan to apply for a tourism visa (29% for a student visa)</span><span class="track"><span class="fill" style="width:58.1%"></span></span><span class="val">58.1%</span></li>
+        </ul>
+        <p class="chart-note">Respondents rated the US visa hardest to research, followed by Schengen and Germany.</p>
+      </div>
+      <div class="grid3">
+        <article class="persona">
+          <header><span class="label">Persona · from INT-1</span><h3>The business traveler</h3></header>
+          <blockquote>"Mistakes in issuing the visa delay meetings that cannot be postponed."</blockquote>
+          <dl>
+            <div><dt>Needs</dt><dd>Processing times, embassy hours, appointment reminders, packages within budget</dd></div>
+            <div><dt>Pain</dt><dd>Work visas need a commercial register, tax card and a 6-month bank statement; one error costs weeks</dd></div>
+          </dl>
+        </article>
+        <article class="persona">
+          <header><span class="label">Persona · from INT-2</span><h3>The first-time student traveler</h3></header>
+          <blockquote>"There was not sufficient information to know the required papers."</blockquote>
+          <dl>
+            <div><dt>Needs</dt><dd>A clear checklist, where to get each document, photo uploads, translations</dd></div>
+            <div><dt>Pain</dt><dd>Refused on the first US application; the next interview slot was a year away</dd></div>
+          </dl>
+        </article>
+        <article class="persona">
+          <header><span class="label">Persona · from INT-3</span><h3>The travel agency partner</h3></header>
+          <blockquote>"Credibility with the client on prices and packages is basic and important."</blockquote>
+          <dl>
+            <div><dt>Needs</dt><dd>Qualified leads, a place to publish bundles, fewer repeated visa questions</dd></div>
+            <div><dt>Offer</dt><dd>5% referral fee per traveler booked through Safarny</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <!-- 04 PROCESS -->
+    <section id="process">
+      <div class="sec-head">
+        <span class="label">04 · As-is / to-be</span>
+        <h2>Where the current journey breaks, and what replaces it</h2>
+        <p>I mapped the traveler's journey today and the target journey in BPMN. The biggest change: document errors are caught by a reviewer before the embassy appointment, not by the embassy after it.</p>
+      </div>
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 900 400" role="img" aria-label="BPMN comparison. As-is: the traveler searches several sites, asks an agency, collects documents and books on the embassy site; a rejection sends them back to the start. To-be: the traveler picks a destination in Safarny, gets a checklist, uploads documents, and an admin check loops back before booking an appointment with a reminder.">
+            <defs>
+              <marker id="bp-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+              <marker id="bp-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mkP" d="M0,0 L10,5 L0,10 z"/></marker>
+              <marker id="bp-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mkA" d="M0,0 L10,5 L0,10 z"/></marker>
+            </defs>
+            <text class="label-t sm b" x="20" y="24">AS-IS · TRAVELER ALONE</text>
+            <path class="lnP" d="M740,82 V56 H140 V80" marker-end="url(#bp-p)"/>
+            <text class="sm" x="440" y="50" text-anchor="middle" style="fill:var(--gold)">Rejected: start again</text>
+            <circle class="start" cx="40" cy="110" r="12"/>
+            <line class="ln" x1="52" y1="110" x2="73" y2="110" marker-end="url(#bp-a)"/>
+            <rect class="box" x="75" y="84" width="130" height="52" rx="8"/><text x="140" y="106" text-anchor="middle">Search embassy</text><text x="140" y="122" text-anchor="middle">sites &amp; forums</text>
+            <line class="ln" x1="205" y1="110" x2="233" y2="110" marker-end="url(#bp-a)"/>
+            <rect class="box" x="235" y="84" width="130" height="52" rx="8"/><text x="300" y="106" text-anchor="middle">Ask an agency</text><text x="300" y="122" text-anchor="middle">or friends</text>
+            <line class="ln" x1="365" y1="110" x2="393" y2="110" marker-end="url(#bp-a)"/>
+            <rect class="box" x="395" y="84" width="130" height="52" rx="8"/><text x="460" y="106" text-anchor="middle">Collect documents</text><text x="460" y="122" text-anchor="middle">office by office</text>
+            <line class="ln" x1="525" y1="110" x2="553" y2="110" marker-end="url(#bp-a)"/>
+            <rect class="box" x="555" y="84" width="130" height="52" rx="8"/><text x="620" y="106" text-anchor="middle">Book on embassy</text><text x="620" y="122" text-anchor="middle">site &amp; submit</text>
+            <line class="ln" x1="685" y1="110" x2="710" y2="110" marker-end="url(#bp-a)"/>
+            <path class="gw" d="M740,82 L768,110 L740,138 L712,110 Z"/>
+            <text class="sm" x="740" y="156" text-anchor="middle">Accepted?</text>
+            <line class="ln" x1="768" y1="110" x2="816" y2="110" marker-end="url(#bp-a)"/>
+            <text class="sm" x="792" y="102" text-anchor="middle">Yes</text>
+            <circle class="end" cx="830" cy="110" r="12"/>
+            <text class="sm" x="830" y="140" text-anchor="middle">Visa issued</text>
+            <text class="sm" x="140" y="158" text-anchor="middle" style="fill:var(--gold)">3+ sources</text>
+            <text class="sm" x="300" y="158" text-anchor="middle" style="fill:var(--gold)">advice varies</text>
+            <text class="sm" x="460" y="158" text-anchor="middle" style="fill:var(--gold)">no checklist</text>
+            <text class="sm" x="620" y="158" text-anchor="middle" style="fill:var(--gold)">waits up to a year</text>
+
+            <line class="grid" x1="20" y1="196" x2="880" y2="196"/>
+
+            <text class="sm b" x="20" y="226" style="fill:var(--accent)">TO-BE · WITH SAFARNY</text>
+            <circle class="start" cx="40" cy="300" r="12"/>
+            <line class="ln" x1="52" y1="300" x2="73" y2="300" marker-end="url(#bp-a)"/>
+            <rect class="hl" x="75" y="274" width="130" height="52" rx="8"/><text x="140" y="296" text-anchor="middle">Choose destination</text><text x="140" y="312" text-anchor="middle">&amp; visa type</text>
+            <line class="ln" x1="205" y1="300" x2="233" y2="300" marker-end="url(#bp-a)"/>
+            <rect class="hl" x="235" y="274" width="130" height="52" rx="8"/><text x="300" y="296" text-anchor="middle">Get checklist +</text><text x="300" y="312" text-anchor="middle">where to obtain</text>
+            <line class="ln" x1="365" y1="300" x2="393" y2="300" marker-end="url(#bp-a)"/>
+            <rect class="hl" x="395" y="274" width="130" height="52" rx="8"/><text x="460" y="296" text-anchor="middle">Upload</text><text x="460" y="312" text-anchor="middle">documents</text>
+            <line class="ln" x1="525" y1="300" x2="560" y2="300" marker-end="url(#bp-a)"/>
+            <path class="gw" d="M590,272 L618,300 L590,328 L562,300 Z"/>
+            <text class="sm" x="590" y="264" text-anchor="middle">Admin check: complete?</text>
+            <line class="ln" x1="618" y1="300" x2="648" y2="300" marker-end="url(#bp-a)"/>
+            <text class="sm" x="633" y="292" text-anchor="middle">Yes</text>
+            <rect class="hl" x="650" y="274" width="130" height="52" rx="8"/><text x="715" y="296" text-anchor="middle">Book appointment</text><text x="715" y="312" text-anchor="middle">+ reminder</text>
+            <line class="ln" x1="780" y1="300" x2="816" y2="300" marker-end="url(#bp-a)"/>
+            <circle class="end" cx="830" cy="300" r="12"/>
+            <text class="sm" x="830" y="330" text-anchor="middle">Ready to apply</text>
+            <path class="lnA" d="M590,328 V362 H460 V328" marker-end="url(#bp-g)"/>
+            <text class="sm" x="525" y="380" text-anchor="middle" style="fill:var(--accent)">No: alert names the document to fix</text>
+          </svg>
+        </div>
+        <figcaption><b>BPMN, as-is vs to-be.</b> In the current process a rejection sends the traveler back to the start, after the embassy has already seen the mistake. In the target process, shaded tasks are handled inside Safarny and the correction loop closes before the appointment is booked.</figcaption>
+      </figure>
+      <div class="table-wrap">
+        <table class="spec">
+          <thead><tr><th>Area</th><th>Current state</th><th>Future state</th><th>Closed by</th></tr></thead>
+          <tbody>
+            <tr><td class="main">Information</td><td>Scattered across embassy sites, forums and agencies</td><td>One verified page per destination and visa type</td><td><span class="src">US-01</span><span class="src">US-09</span></td></tr>
+            <tr><td class="main">Documents</td><td>Requirements learned by trial and error</td><td>Checklist with where each document is issued in Egypt</td><td><span class="src">US-02</span><span class="src">US-03</span></td></tr>
+            <tr><td class="main">Quality check</td><td>Errors found by the embassy, after submission</td><td>Admin pre-review with a specific correction alert</td><td><span class="src">US-05</span></td></tr>
+            <tr><td class="main">Appointments</td><td>Booked separately, missed or booked too late</td><td>Booked in the same flow, with a reminder</td><td><span class="src">US-06</span></td></tr>
+            <tr><td class="main">Cost</td><td>Opaque pricing for flights, hotels and packages</td><td>Agency bundles filtered by budget</td><td><span class="src">US-07</span><span class="src">US-08</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 05 SCOPE -->
+    <section id="scope">
+      <div class="sec-head">
+        <span class="label">05 · Scope</span>
+        <h2>What crosses the system boundary</h2>
+        <p>The context diagram fixed scope early. Safarny doesn't sell flights or submit visas itself: it guides, checks and books, and hands travel sales to partner agencies.</p>
+      </div>
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 760 420" role="img" aria-label="Context diagram. Safarny exchanges data with five external entities: applicant, admin, travel agency, embassy and bank.">
+            <defs>
+              <marker id="cx-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+            </defs>
+            <rect class="hl" x="300" y="120" width="160" height="180" rx="12"/>
+            <text class="ttl" x="380" y="205" text-anchor="middle">Safarny</text>
+            <text class="sm" x="380" y="224" text-anchor="middle">visa &amp; travel platform</text>
+
+            <rect class="box" x="20" y="185" width="130" height="50" rx="4"/><text class="b" x="85" y="215" text-anchor="middle">Applicant</text>
+            <line class="ln" x1="150" y1="200" x2="298" y2="200" marker-end="url(#cx-a)"/><text class="sm" x="225" y="193" text-anchor="middle">requests, uploads</text>
+            <line class="ln" x1="300" y1="220" x2="152" y2="220" marker-end="url(#cx-a)"/><text class="sm" x="225" y="235" text-anchor="middle">checklists, bookings</text>
+
+            <rect class="box" x="315" y="20" width="130" height="50" rx="4"/><text class="b" x="380" y="50" text-anchor="middle">Admin</text>
+            <line class="ln" x1="360" y1="70" x2="360" y2="118" marker-end="url(#cx-a)"/><text class="sm" x="352" y="100" text-anchor="end">visa &amp; bundle updates</text>
+            <line class="ln" x1="400" y1="120" x2="400" y2="72" marker-end="url(#cx-a)"/><text class="sm" x="408" y="100">documents to review</text>
+
+            <rect class="box" x="590" y="125" width="150" height="50" rx="4"/><text class="b" x="665" y="155" text-anchor="middle">Travel agency</text>
+            <line class="ln" x1="460" y1="142" x2="588" y2="142" marker-end="url(#cx-a)"/><text class="sm" x="525" y="135" text-anchor="middle">referred travelers</text>
+            <line class="ln" x1="590" y1="160" x2="462" y2="160" marker-end="url(#cx-a)"/><text class="sm" x="525" y="175" text-anchor="middle">bundles</text>
+
+            <rect class="box" x="590" y="245" width="150" height="50" rx="4"/><text class="b" x="665" y="275" text-anchor="middle">Embassy</text>
+            <line class="ln" x1="460" y1="262" x2="588" y2="262" marker-end="url(#cx-a)"/><text class="sm" x="525" y="255" text-anchor="middle">booking requests</text>
+            <line class="ln" x1="590" y1="280" x2="462" y2="280" marker-end="url(#cx-a)"/><text class="sm" x="525" y="295" text-anchor="middle">slots, visa rules</text>
+
+            <rect class="box" x="315" y="350" width="130" height="50" rx="4"/><text class="b" x="380" y="380" text-anchor="middle">Bank</text>
+            <line class="ln" x1="360" y1="300" x2="360" y2="348" marker-end="url(#cx-a)"/><text class="sm" x="352" y="330" text-anchor="end">payment request</text>
+            <line class="ln" x1="400" y1="350" x2="400" y2="302" marker-end="url(#cx-a)"/><text class="sm" x="408" y="330">authorization</text>
+          </svg>
+        </div>
+        <figcaption><b>Context diagram (DFD level 0).</b> Five external entities and the data each one sends and receives. Card payments go through the bank; travel purchases happen on the agency's side after a referral.</figcaption>
+      </figure>
+      <div class="grid2">
+        <div class="card"><span class="label">In scope · release 1</span><ul><li>Web app and mobile app for travelers in Egypt</li><li>Visa guidance per destination and visa type</li><li>Document checklist and where to obtain each item</li><li>Document upload and admin review</li><li>Embassy appointment booking and reminders</li><li>Agency bundles and 6-month / yearly subscriptions</li></ul></div>
+        <div class="card"><span class="label">Out of scope · later</span><ul><li>Selling flights or hotels directly</li><li>Submitting visa applications for the traveler</li><li>Travel insurance</li><li>Document translation</li><li>Markets outside Egypt and extra languages</li></ul></div>
+      </div>
+    </section>
+
+    <!-- 06 BACKLOG -->
+    <section id="backlog">
+      <div class="sec-head">
+        <span class="label">06 · Requirements</span>
+        <h2>A prioritized backlog, traced to evidence</h2>
+        <p>I rewrote the original 17 functional requirements as user stories, prioritized them with MoSCoW, and linked each one to the research that justifies it and the use case that realizes it.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="spec">
+          <thead><tr><th>ID</th><th>User story</th><th>Priority</th><th>Evidence</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td class="id">US-01</td><td class="main">As a traveler, I want to choose a destination and trip purpose so that I see the visa type that applies to me.</td><td><span class="pri must">Must</span></td><td><span class="src">Survey 96.8%</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-02</td><td class="main">As a traveler, I want a checklist of required documents so that I don't miss anything.</td><td><span class="pri must">Must</span></td><td><span class="src">Survey 96.8%</span><span class="src">INT-2</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-03</td><td class="main">As a traveler, I want to know where and how to get each document in Egypt so that I can prepare faster.</td><td><span class="pri must">Must</span></td><td><span class="src">INT-2</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-06</td><td class="main">As a traveler, I want to book an embassy appointment and get a reminder so that I don't miss it.</td><td><span class="pri must">Must</span></td><td><span class="src">Survey 87.1%</span><span class="src">INT-1</span></td><td>UC-06</td></tr>
+            <tr><td class="id">US-09</td><td class="main">As an admin, I want to update destinations and visa rules so that information stays current.</td><td><span class="pri must">Must</span></td><td><span class="src">INT-2</span><span class="src">Risk R1</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-11</td><td class="main">As a new user, I want to sign up with an OTP so that my account and passport data are protected.</td><td><span class="pri must">Must</span></td><td><span class="src">NFR-03</span></td><td>UC-01, 02</td></tr>
+            <tr><td class="id">US-04</td><td class="main">As a business traveler, I want to see processing times and embassy hours so that I can plan around meetings.</td><td><span class="pri should">Should</span></td><td><span class="src">INT-1</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-05</td><td class="main">As a traveler, I want my documents reviewed before the appointment so that I'm not rejected for a fixable error.</td><td><span class="pri should">Should</span></td><td><span class="src">INT-1</span><span class="src">INT-2</span></td><td>UC-06</td></tr>
+            <tr><td class="id">US-07</td><td class="main">As a traveler, I want bundles that fit my budget so that I avoid overpaying.</td><td><span class="pri should">Should</span></td><td><span class="src">INT-1</span></td><td>UC-05</td></tr>
+            <tr><td class="id">US-08</td><td class="main">As a travel agency, I want to publish bundles and receive referred travelers so that I gain qualified leads.</td><td><span class="pri should">Should</span></td><td><span class="src">INT-3</span></td><td>UC-05</td></tr>
+            <tr><td class="id">US-10</td><td class="main">As a traveler, I want a 6-month or yearly plan paid by card so that I keep access while I travel.</td><td><span class="pri should">Should</span></td><td><span class="src">Revenue model</span></td><td>UC-04</td></tr>
+            <tr><td class="id">US-12</td><td class="main">As a traveler, I want alerts when visa policy changes for my destination so that I can react early.</td><td><span class="pri could">Could</span></td><td><span class="src">SWOT threat</span></td><td>UC-03</td></tr>
+            <tr><td class="id">US-13</td><td class="main">As a traveler, I want my documents translated so that I can submit them in the embassy's language.</td><td><span class="pri wont">Won't (R1)</span></td><td><span class="src">INT-1</span><span class="src">INT-2</span></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid2">
+        <div class="gherkin">
+          <span class="label">Acceptance criteria · US-02</span>
+          <p class="story">Document checklist</p>
+<pre><b>Given</b> I selected "Germany" and "Tourism visa"
+<b>When</b>  I open the requirements page
+<b>Then</b>  every required document appears as a checklist item
+<b>And</b>   each item shows where it is issued in Egypt
+<b>And</b>   the items I tick are saved to my account</pre>
+        </div>
+        <div class="gherkin">
+          <span class="label">Acceptance criteria · US-06</span>
+          <p class="story">Appointment booking</p>
+<pre><b>Given</b> an admin approved my uploaded documents
+<b>When</b>  I choose an open embassy slot
+<b>Then</b>  the slot is reserved and I get a confirmation email
+<b>And</b>   a reminder is sent 48 hours before the appointment
+
+<b>Given</b> a required document is missing
+<b>When</b>  I try to book
+<b>Then</b>  booking is blocked and I see which document to fix</pre>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="spec">
+          <thead><tr><th>ID</th><th>Non-functional requirement</th><th>Measurable target</th></tr></thead>
+          <tbody>
+            <tr><td class="id">NFR-01</td><td class="main">Performance</td><td>Requirement pages load in under 3 seconds on a 4G connection</td></tr>
+            <tr><td class="id">NFR-02</td><td class="main">Availability</td><td>99.5% monthly uptime, with daily backups and a tested restore</td></tr>
+            <tr><td class="id">NFR-03</td><td class="main">Security &amp; privacy</td><td>Hashed passwords, passport data encrypted at rest, compliant with Egypt's Personal Data Protection Law (No. 151 of 2020)</td></tr>
+            <tr><td class="id">NFR-04</td><td class="main">Usability</td><td>A first-time user reaches their checklist in under 2 minutes in usability testing</td></tr>
+            <tr><td class="id">NFR-05</td><td class="main">Accessibility</td><td>WCAG 2.2 AA, including color-blind-safe status colors</td></tr>
+            <tr><td class="id">NFR-06</td><td class="main">Data accuracy</td><td>Every visa rule shows a "last verified" date and is re-checked against official sources at least monthly</td></tr>
+            <tr><td class="id">NFR-07</td><td class="main">Compatibility</td><td>Current and previous versions of Chrome, Safari, Edge and Firefox; iOS and Android apps</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 07 MODELS -->
+    <section id="models">
+      <div class="sec-head">
+        <span class="label">07 · System models</span>
+        <h2>From behavior to data</h2>
+        <p>Six use cases describe what each actor does. The sequence diagram walks through the riskiest flow, and the ERD turns it all into a MySQL schema. The original documentation also includes activity, class, CRC, object and communication diagrams.</p>
+      </div>
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 760 400" role="img" aria-label="Use case diagram. The applicant takes part in all six use cases. The admin maintains destinations, bundles and appointments. The bank handles subscription payments, the travel agency provides bundles, and the embassy provides appointments.">
+            <rect class="frame" x="200" y="20" width="360" height="360" rx="10"/>
+            <text class="b" x="214" y="40">Safarny</text>
+            <ellipse class="box" cx="380" cy="72" rx="110" ry="20"/><text x="380" y="76" text-anchor="middle">UC-01 Sign up</text>
+            <ellipse class="box" cx="380" cy="126" rx="110" ry="20"/><text x="380" y="130" text-anchor="middle">UC-02 Log in</text>
+            <ellipse class="hl" cx="380" cy="180" rx="110" ry="20"/><text x="380" y="184" text-anchor="middle">UC-03 Find visa requirements</text>
+            <ellipse class="box" cx="380" cy="234" rx="110" ry="20"/><text x="380" y="238" text-anchor="middle">UC-04 Subscribe &amp; pay</text>
+            <ellipse class="box" cx="380" cy="288" rx="110" ry="20"/><text x="380" y="292" text-anchor="middle">UC-05 Browse travel bundles</text>
+            <ellipse class="hl" cx="380" cy="342" rx="110" ry="20"/><text x="380" y="346" text-anchor="middle">UC-06 Book appointment</text>
+
+            <g class="actor"><circle cx="90" cy="170" r="9"/><line x1="90" y1="179" x2="90" y2="206"/><line x1="76" y1="188" x2="104" y2="188"/><line x1="90" y1="206" x2="79" y2="230"/><line x1="90" y1="206" x2="101" y2="230"/></g>
+            <text class="b" x="90" y="250" text-anchor="middle">Applicant</text>
+            <line class="ln" x1="108" y1="194" x2="270" y2="72"/>
+            <line class="ln" x1="108" y1="194" x2="270" y2="126"/>
+            <line class="ln" x1="108" y1="194" x2="270" y2="180"/>
+            <line class="ln" x1="108" y1="194" x2="270" y2="234"/>
+            <line class="ln" x1="108" y1="194" x2="270" y2="288"/>
+            <line class="ln" x1="108" y1="194" x2="270" y2="342"/>
+
+            <g class="actor"><circle cx="670" cy="46" r="8"/><line x1="670" y1="54" x2="670" y2="76"/><line x1="658" y1="62" x2="682" y2="62"/><line x1="670" y1="76" x2="661" y2="96"/><line x1="670" y1="76" x2="679" y2="96"/></g>
+            <text class="b" x="670" y="114" text-anchor="middle">Admin</text>
+            <line class="ln" x1="652" y1="70" x2="490" y2="180"/>
+            <line class="ln" x1="652" y1="70" x2="490" y2="288"/>
+            <line class="ln" x1="652" y1="70" x2="490" y2="342"/>
+
+            <g class="actor"><circle cx="670" cy="146" r="8"/><line x1="670" y1="154" x2="670" y2="176"/><line x1="658" y1="162" x2="682" y2="162"/><line x1="670" y1="176" x2="661" y2="196"/><line x1="670" y1="176" x2="679" y2="196"/></g>
+            <text class="b" x="670" y="214" text-anchor="middle">Bank</text>
+            <line class="ln" x1="652" y1="170" x2="490" y2="234"/>
+
+            <g class="actor"><circle cx="670" cy="236" r="8"/><line x1="670" y1="244" x2="670" y2="266"/><line x1="658" y1="252" x2="682" y2="252"/><line x1="670" y1="266" x2="661" y2="286"/><line x1="670" y1="266" x2="679" y2="286"/></g>
+            <text class="b" x="670" y="304" text-anchor="middle">Travel agency</text>
+            <line class="ln" x1="652" y1="260" x2="490" y2="288"/>
+
+            <g class="actor"><circle cx="670" cy="322" r="8"/><line x1="670" y1="330" x2="670" y2="352"/><line x1="658" y1="338" x2="682" y2="338"/><line x1="670" y1="352" x2="661" y2="372"/><line x1="670" y1="352" x2="679" y2="372"/></g>
+            <text class="b" x="670" y="392" text-anchor="middle">Embassy</text>
+            <line class="ln" x1="652" y1="346" x2="490" y2="342"/>
+          </svg>
+        </div>
+        <figcaption><b>UML use case diagram.</b> The applicant takes part in every use case; admins maintain the content behind three of them. Shaded use cases carry the core value and the highest risk, so they got the most detailed specifications.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 720 480" role="img" aria-label="Sequence diagram for booking an embassy appointment, with an alternative path when documents are incomplete.">
+            <defs>
+              <marker id="sq-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+              <marker id="sq-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mkA" d="M0,0 L10,5 L0,10 z"/></marker>
+              <marker id="sq-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mkP" d="M0,0 L10,5 L0,10 z"/></marker>
+            </defs>
+            <rect class="box" x="25" y="14" width="130" height="34" rx="4"/><text class="b" x="90" y="36" text-anchor="middle">Applicant</text>
+            <rect class="hl" x="205" y="14" width="130" height="34" rx="4"/><text class="b" x="270" y="36" text-anchor="middle">Safarny</text>
+            <rect class="box" x="385" y="14" width="130" height="34" rx="4"/><text class="b" x="450" y="36" text-anchor="middle">Admin</text>
+            <rect class="box" x="565" y="14" width="130" height="34" rx="4"/><text class="b" x="630" y="36" text-anchor="middle">Embassy</text>
+            <line class="ln dash" x1="90" y1="48" x2="90" y2="470"/>
+            <line class="ln dash" x1="270" y1="48" x2="270" y2="470"/>
+            <line class="ln dash" x1="450" y1="48" x2="450" y2="470"/>
+            <line class="ln dash" x1="630" y1="48" x2="630" y2="470"/>
+
+            <line class="ln" x1="90" y1="86" x2="268" y2="86" marker-end="url(#sq-a)"/><text class="sm" x="180" y="79" text-anchor="middle">1. view open slots</text>
+            <line class="ln" x1="270" y1="120" x2="628" y2="120" marker-end="url(#sq-a)"/><text class="sm" x="540" y="113" text-anchor="middle">2. request open slots</text>
+            <line class="ln dash" x1="630" y1="154" x2="272" y2="154" marker-end="url(#sq-a)"/><text class="sm" x="540" y="147" text-anchor="middle">3. open slots</text>
+            <line class="ln dash" x1="270" y1="188" x2="92" y2="188" marker-end="url(#sq-a)"/><text class="sm" x="180" y="181" text-anchor="middle">4. show slots</text>
+            <line class="ln" x1="90" y1="222" x2="268" y2="222" marker-end="url(#sq-a)"/><text class="sm" x="180" y="215" text-anchor="middle">5. pick slot, upload documents</text>
+            <line class="ln" x1="270" y1="256" x2="448" y2="256" marker-end="url(#sq-a)"/><text class="sm" x="360" y="249" text-anchor="middle">6. review documents</text>
+
+            <rect class="frame" x="20" y="276" width="680" height="186"/>
+            <path class="frame" d="M20,294 H56 L64,286 V276"/>
+            <text class="mono" x="28" y="290">alt</text>
+            <text class="mono" x="74" y="291">[documents complete]</text>
+            <line class="lnA" x1="450" y1="318" x2="272" y2="318" marker-end="url(#sq-g)"/><text class="sm" x="360" y="311" text-anchor="middle">7. approve</text>
+            <line class="lnA" x1="270" y1="352" x2="628" y2="352" marker-end="url(#sq-g)"/><text class="sm" x="540" y="345" text-anchor="middle">8. reserve slot</text>
+            <line class="lnA" x1="270" y1="386" x2="92" y2="386" marker-end="url(#sq-g)"/><text class="sm" x="180" y="379" text-anchor="middle">9. confirmation + reminder</text>
+            <line class="frame" x1="20" y1="404" x2="700" y2="404" stroke-dasharray="6 4"/>
+            <text class="mono" x="74" y="420">[missing or wrong]</text>
+            <line class="lnP" x1="450" y1="446" x2="92" y2="446" marker-end="url(#sq-p)"/><text class="sm" x="360" y="439" text-anchor="middle" style="fill:var(--gold)">7b. alert: document to fix</text>
+          </svg>
+        </div>
+        <figcaption><b>UML sequence diagram, UC-06.</b> The slot is only reserved with the embassy after an admin approves the documents (step 7). If anything is missing, the traveler is told exactly what to fix and no embassy slot is used.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="dg-wrap">
+          <svg class="dg" viewBox="0 0 940 510" role="img" aria-label="Entity relationship diagram with twelve entities in three groups: accounts and services, appointments, and visa content.">
+            <!-- row 1 -->
+            <g><rect class="box" x="20" y="20" width="180" height="106" rx="4"/><rect class="head" x="21" y="21" width="178" height="25"/><text class="b" x="30" y="38">User</text>
+              <text class="mono" x="30" y="64">PK user_id</text><text class="mono" x="30" y="82">   name</text><text class="mono" x="30" y="100">   email</text><text class="mono" x="30" y="118">   phone</text></g>
+            <g><rect class="box" x="260" y="20" width="180" height="106" rx="4"/><rect class="head" x="261" y="21" width="178" height="25"/><text class="b" x="270" y="38">Account</text>
+              <text class="mono" x="270" y="64">PK account_id</text><text class="mono" x="270" y="82">FK user_id</text><text class="mono" x="270" y="100">   passport_no</text><text class="mono" x="270" y="118">   subscription</text></g>
+            <g><rect class="box" x="500" y="20" width="180" height="106" rx="4"/><rect class="head" x="501" y="21" width="178" height="25"/><text class="b" x="510" y="38">Selected service</text>
+              <text class="mono" x="510" y="64">PK service_id</text><text class="mono" x="510" y="82">FK account_id</text><text class="mono" x="510" y="100">FK agency_id</text><text class="mono" x="510" y="118">FK appt_service_id</text></g>
+            <g><rect class="box" x="740" y="20" width="180" height="106" rx="4"/><rect class="head" x="741" y="21" width="178" height="25"/><text class="b" x="750" y="38">Travel agency</text>
+              <text class="mono" x="750" y="64">PK agency_id</text><text class="mono" x="750" y="82">   name</text><text class="mono" x="750" y="100">   referral_link</text><text class="mono" x="750" y="118">   feedback</text></g>
+            <!-- row 2 -->
+            <g><rect class="box" x="20" y="200" width="180" height="106" rx="4"/><rect class="head" x="21" y="201" width="178" height="25"/><text class="b" x="30" y="218">Issuing office</text>
+              <text class="mono" x="30" y="244">PK office_id</text><text class="mono" x="30" y="262">FK country_id</text><text class="mono" x="30" y="280">   location</text><text class="mono" x="30" y="298">   open / close</text></g>
+            <g><rect class="box" x="260" y="200" width="180" height="106" rx="4"/><rect class="head" x="261" y="201" width="178" height="25"/><text class="b" x="270" y="218">Appointment</text>
+              <text class="mono" x="270" y="244">PK appointment_id</text><text class="mono" x="270" y="262">FK office_id</text><text class="mono" x="270" y="280">   day, time</text><text class="mono" x="270" y="298">   status</text></g>
+            <g><rect class="box" x="500" y="200" width="180" height="106" rx="4"/><rect class="head" x="501" y="201" width="178" height="25"/><text class="b" x="510" y="218">Appointment service</text>
+              <text class="mono" x="510" y="244">PK appt_service_id</text><text class="mono" x="510" y="262">FK appointment_id</text><text class="mono" x="510" y="280">   service_fee</text><text class="mono" x="510" y="298">   cancel_policy</text></g>
+            <g><rect class="box" x="740" y="200" width="180" height="106" rx="4"/><rect class="head" x="741" y="201" width="178" height="25"/><text class="b" x="750" y="218">Visa requirement</text>
+              <text class="mono" x="750" y="244">PK requirement_id</text><text class="mono" x="750" y="262">   restrictions</text><text class="mono" x="750" y="280">   price</text><text class="mono" x="750" y="298">   issuing_duration</text></g>
+            <!-- row 3 -->
+            <g><rect class="box" x="20" y="380" width="180" height="106" rx="4"/><rect class="head" x="21" y="381" width="178" height="25"/><text class="b" x="30" y="398">Country</text>
+              <text class="mono" x="30" y="424">PK country_id</text><text class="mono" x="30" y="442">   name, region</text><text class="mono" x="30" y="460">   language</text><text class="mono" x="30" y="478">   currency</text></g>
+            <g><rect class="box" x="260" y="380" width="180" height="106" rx="4"/><rect class="head" x="261" y="381" width="178" height="25"/><text class="b" x="270" y="398">Visa</text>
+              <text class="mono" x="270" y="424">PK visa_id</text><text class="mono" x="270" y="442">FK country_id</text><text class="mono" x="270" y="460">   visa_fee</text><text class="mono" x="270" y="478">   expiration_date</text></g>
+            <g><rect class="hl" x="500" y="380" width="180" height="106" rx="4"/><text class="b" x="510" y="398">Visa details</text>
+              <text class="mono" x="510" y="424">PK details_id</text><text class="mono" x="510" y="442">FK visa_id</text><text class="mono" x="510" y="460">FK type_id</text><text class="mono" x="510" y="478">FK requirement_id</text></g>
+            <g><rect class="box" x="740" y="380" width="180" height="106" rx="4"/><rect class="head" x="741" y="381" width="178" height="25"/><text class="b" x="750" y="398">Visa type</text>
+              <text class="mono" x="750" y="424">PK type_id</text><text class="mono" x="750" y="442">   type_name</text></g>
+
+            <!-- relationships -->
+            <line class="ln" x1="200" y1="73" x2="260" y2="73"/><text class="sm" x="206" y="67">1</text><text class="sm" x="248" y="67">1</text>
+            <line class="ln" x1="440" y1="73" x2="500" y2="73"/><text class="sm" x="446" y="67">1</text><text class="sm" x="488" y="67">N</text>
+            <line class="ln" x1="680" y1="73" x2="740" y2="73"/><text class="sm" x="686" y="67">N</text><text class="sm" x="728" y="67">1</text>
+            <line class="ln" x1="590" y1="126" x2="590" y2="200"/><text class="sm" x="596" y="142">N</text><text class="sm" x="596" y="194">1</text>
+            <line class="ln" x1="200" y1="253" x2="260" y2="253"/><text class="sm" x="206" y="247">1</text><text class="sm" x="248" y="247">N</text>
+            <line class="ln" x1="440" y1="253" x2="500" y2="253"/><text class="sm" x="446" y="247">1</text><text class="sm" x="488" y="247">1</text>
+            <line class="ln" x1="110" y1="306" x2="110" y2="380"/><text class="sm" x="116" y="322">1</text><text class="sm" x="116" y="374">1</text>
+            <line class="ln" x1="200" y1="433" x2="260" y2="433"/><text class="sm" x="206" y="427">1</text><text class="sm" x="248" y="427">N</text>
+            <line class="ln" x1="440" y1="433" x2="500" y2="433"/><text class="sm" x="446" y="427">1</text><text class="sm" x="488" y="427">N</text>
+            <line class="ln" x1="680" y1="455" x2="740" y2="455"/><text class="sm" x="686" y="449">N</text><text class="sm" x="728" y="449">1</text>
+            <path class="ln" d="M680,405 H710 V253 H740"/><text class="sm" x="686" y="399">N</text><text class="sm" x="728" y="247">1</text>
+          </svg>
+        </div>
+        <figcaption><b>Entity relationship diagram.</b> Twelve entities in three clusters: accounts and services (top), appointments (middle) and visa content (bottom). <em>Visa details</em> is the join that lets one visa carry several types and requirement sets, which keeps admin updates to one row per rule (US-09).</figcaption>
+      </figure>
+    </section>
+
+    <!-- 08 BUSINESS CASE -->
+    <section id="business-case">
+      <div class="sec-head">
+        <span class="label">08 · Business case</span>
+        <h2>Pays back in month 8</h2>
+        <p>I sized the build with use case points, priced it, and tested it against a subscription forecast. All amounts in EGP.</p>
+      </div>
+      <ol class="chain">
+        <li><span class="label">Size</span><b>59.55</b><span>use case points</span></li>
+        <li><span class="label">Total cost</span><b>292,329</b><span>build 157,329 + first-year running 135,000</span></li>
+        <li><span class="label">Revenue</span><b>40,000 / mo</b><span>200 subscribers × 200 EGP</span></li>
+        <li class="end"><span class="label">Break-even</span><b>Month 8</b><span>292,329 ÷ 40,000 = 7.3 months</span></li>
+      </ol>
+
+      <div class="calc-box" id="calculator">
+        <div class="calc-head">
+          <h3>Try the assumptions</h3>
+          <button type="button" class="btn-sm" id="calc-reset">Reset to plan</button>
+        </div>
+        <div class="calc-grid">
+          <div class="controls">
+            <label for="in-subs"><span>New subscribers per month</span><output id="out-subs">200</output></label>
+            <input type="range" id="in-subs" min="50" max="400" step="10" value="200">
+            <label for="in-price"><span>Subscription price (EGP)</span><output id="out-price">200</output></label>
+            <input type="range" id="in-price" min="100" max="400" step="10" value="200">
+            <label class="check" for="in-vat"><input type="checkbox" id="in-vat"><span>Price already includes 14% VAT</span></label>
+            <dl class="results">
+              <div><dt>Revenue kept / month</dt><dd id="res-rev">40,000</dd></div>
+              <div><dt>Months to recover 292,329</dt><dd id="res-months">7.3</dd></div>
+              <div class="hl-res"><dt>Break-even</dt><dd id="res-month">Month 8</dd></div>
+            </dl>
+          </div>
+          <figure class="calc-chart">
+            <svg class="dg" id="be-chart" viewBox="0 0 560 280" role="img" aria-label="Break-even chart: revenue so far against the total cost of 292,329 EGP."></svg>
+            <figcaption id="be-caption">Revenue so far passes the total cost at 7.3 months, during month 8.</figcaption>
+          </figure>
+        </div>
+        <p class="note">Subscriptions only; commission and referral income are left out, which keeps the forecast conservative. The full working (use case points, cost table, month-by-month balance and scenarios) is in a separate Excel workbook, available on request.</p>
+      </div>
+
+      <details class="more">
+        <summary>Business model canvas</summary>
+        <div class="canvas" aria-label="Business model canvas">
+          <div class="c-kp"><span class="label">Key partners</span>Travel agencies<br>Embassies</div>
+          <div class="c-ka"><span class="label">Key activities</span>Visa content upkeep, document review, platform operations</div>
+          <div class="c-kr"><span class="label">Key resources</span>Visa database, developers, marketers</div>
+          <div class="c-vp"><span class="label">Value proposition</span>Clear visa guidance, document checklists and sources, pre-checked applications, appointment booking, budget travel bundles</div>
+          <div class="c-cr"><span class="label">Relationships</span>Email, customer support, personalization</div>
+          <div class="c-ch"><span class="label">Channels</span>Website, mobile app</div>
+          <div class="c-cs"><span class="label">Segments</span>Egyptian travelers aged 16–70 (students, first-time travelers, businesspeople); travel agencies</div>
+          <div class="c-cost"><span class="label">Cost structure</span>Development, marketing (SEO, social ads), workspace, maintenance</div>
+          <div class="c-rev"><span class="label">Revenue streams</span>Subscriptions, 8% user commission, agency referrals</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 09 RISKS -->
+    <section id="risks">
+      <div class="sec-head">
+        <span class="label">09 · Risks</span>
+        <h2>Risk register</h2>
+        <p>Built from the SWOT's weaknesses and threats. The top risk is the product's own promise: information that goes out of date.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="spec">
+          <thead><tr><th>ID</th><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td class="id">R1</td><td class="main">Visa rules change without notice</td><td><span class="lvl h">High</span></td><td><span class="lvl h">High</span></td><td>"Last verified" date on every rule, monthly checks, policy-change alerts (US-12)</td></tr>
+            <tr><td class="id">R2</td><td class="main">Dependence on external and scraped data</td><td><span class="lvl m">Medium</span></td><td><span class="lvl h">High</span></td><td>Official embassy sources first; admins can edit any rule manually (US-09)</td></tr>
+            <tr><td class="id">R3</td><td class="main">Low willingness to pay at launch</td><td><span class="lvl m">Medium</span></td><td><span class="lvl h">High</span></td><td>Six months commission-free; agency referrals as a second revenue stream</td></tr>
+            <tr><td class="id">R4</td><td class="main">Breach of passport and personal data</td><td><span class="lvl l">Low</span></td><td><span class="lvl h">High</span></td><td>Encryption at rest, role-based admin access, PDPL compliance (NFR-03)</td></tr>
+            <tr><td class="id">R5</td><td class="main">Travel bans or global events cut demand</td><td><span class="lvl m">Medium</span></td><td><span class="lvl m">Medium</span></td><td>Travel advisories in-app; diversify into agency bundles</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 10 DELIVERY -->
+    <section id="delivery">
+      <div class="sec-head">
+        <span class="label">10 · Delivery</span>
+        <h2>Phases for the milestones, sprints in Jira for the build</h2>
+        <p>Each semester was a fixed university milestone, so the overall plan is phased and scheduled in Microsoft Project. I owned the business analysis tasks in Planning and Analysis: market analysis, stakeholders, feasibility and the business model. The build itself is managed in Jira.</p>
+      </div>
+      <div class="gantt" role="figure" aria-label="Project schedule from October 2023 to March 2024">
+        <div class="g-inner">
+          <div class="g-axis"><span></span><div class="g-ticks"><span style="left:0%">Oct</span><span style="left:16.9%">Nov</span><span style="left:33.3%">Dec</span><span style="left:50.3%">Jan</span><span style="left:67.2%">Feb</span><span style="left:83.1%">Mar</span></div><span class="label" style="text-align:right">Days</span></div>
+          <div class="g-row"><span>Planning</span><div class="g-lane"><span class="g-bar ba" style="left:0%;width:16.9%" title="1 Oct – 31 Oct 2023"></span></div><span class="dur">23</span></div>
+          <div class="g-row"><span>Analysis</span><div class="g-lane"><span class="g-bar ba" style="left:16.9%;width:10.4%" title="1 Nov – 19 Nov 2023"></span></div><span class="dur">13</span></div>
+          <div class="g-row"><span>Design</span><div class="g-lane"><span class="g-bar ba" style="left:30.6%;width:16.9%" title="26 Nov – 26 Dec 2023"></span></div><span class="dur">23</span></div>
+          <div class="g-row"><span>Development</span><div class="g-lane"><span class="g-bar" style="left:50.3%;width:29%" title="1 Jan – 22 Feb 2024"></span></div><span class="dur">39</span></div>
+          <div class="g-row"><span>Testing &amp; implementation</span><div class="g-lane"><span class="g-bar" style="left:80.3%;width:9.8%" title="25 Feb – 13 Mar 2024"></span></div><span class="dur">14</span></div>
+          <div class="g-row"><span>Launch</span><div class="g-lane"><span class="g-bar" style="left:88.5%;width:4.4%" title="11 Mar – 18 Mar 2024"></span></div><span class="dur">6</span></div>
+          <div class="g-row"><span>Post launch</span><div class="g-lane"><span class="g-bar" style="left:92.9%;width:7.1%" title="19 Mar – 31 Mar 2024"></span></div><span class="dur">9</span></div>
+          <div class="legend"><span><i style="background:var(--gold)"></i>Semester 1: analysis &amp; design</span><span><i style="background:var(--accent)"></i>Semester 2: build &amp; launch</span></div>
+        </div>
+      </div>
+
+      <div class="bc-step">
+        <div class="bc-head"><span class="bc-no">Jira</span><h3>The backlog as a Jira project</h3></div>
+        <p class="bc-text">Inside the Development phase, the work runs as four two-week sprints in a Jira project with the key <b>SAF</b>. The 13 user stories from section 06 sit under four epics, each story is estimated in story points, and each story is split into sub-tasks for the team. Story SAF-102 is user story US-02, and so on.</p>
+        <div class="table-wrap">
+          <table class="money wide">
+            <thead><tr><th>Epic</th><th>Stories</th><th>Priority mix</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td><span class="jkey">SAF-1</span> Visa guidance</td><td>SAF-101, 102, 103, 104, 109, 112</td><td><span class="pri must">4 Must</span> <span class="pri should">1 Should</span> <span class="pri could">1 Could</span></td><td>21</td></tr>
+              <tr><td><span class="jkey">SAF-2</span> Documents &amp; appointments</td><td>SAF-105, 106</td><td><span class="pri must">1 Must</span> <span class="pri should">1 Should</span></td><td>16</td></tr>
+              <tr><td><span class="jkey">SAF-3</span> Travel bundles</td><td>SAF-107, 108</td><td><span class="pri should">2 Should</span></td><td>10</td></tr>
+              <tr><td><span class="jkey">SAF-4</span> Accounts &amp; subscriptions</td><td>SAF-110, 111</td><td><span class="pri must">1 Must</span> <span class="pri should">1 Should</span></td><td>8</td></tr>
+              <tr class="tot"><td>Release 1</td><td>12 stories (SAF-113 parked as Won't)</td><td></td><td>55</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bc-step">
+        <div class="bc-head"><span class="bc-no">Sprints</span><h3>Sprint plan: Must stories first</h3></div>
+        <div class="table-wrap">
+          <table class="money wide">
+            <thead><tr><th>Sprint</th><th>Dates</th><th>Sprint goal</th><th>Issues</th><th>Points</th></tr></thead>
+            <tbody>
+              <tr><td>Sprint 1</td><td>1 – 14 Jan</td><td>A traveler can sign up, pick a destination and see a checklist</td><td>SAF-111, 101, 102, 109</td><td>16</td></tr>
+              <tr><td>Sprint 2</td><td>15 – 28 Jan</td><td>A traveler can prepare documents and book an appointment</td><td>SAF-103, 106, 104</td><td>13</td></tr>
+              <tr><td>Sprint 3</td><td>29 Jan – 11 Feb</td><td>Documents are reviewed before booking; subscriptions go live</td><td>SAF-105, 110</td><td>13</td></tr>
+              <tr><td>Sprint 4</td><td>12 – 22 Feb</td><td>Agencies can publish bundles; policy alerts</td><td>SAF-107, 108, 112</td><td>13</td></tr>
+              <tr class="tot"><td>Total</td><td>1 Jan – 22 Feb (39 work days)</td><td>All Must stories done by the end of Sprint 2</td><td>12 stories</td><td>55</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="bc-step">
+        <div class="bc-head"><span class="bc-no">Board</span><h3>Sprint 3 board, mid-sprint</h3></div>
+        <div class="board-wrap">
+          <div class="board" role="figure" aria-label="Kanban board for sprint 3 with four columns">
+            <div class="col"><div class="col-h"><span>To do</span><b>2</b></div>
+              <div class="jcard"><span class="jkey">SAF-146</span><p>Card payment with OTP confirmation</p><div class="jmeta"><span class="jepic">&#8627; SAF-110</span><span class="who">Dev</span></div></div>
+              <div class="jcard"><span class="jkey">SAF-143</span><p>Alert email naming the document to fix</p><div class="jmeta"><span class="jepic">&#8627; SAF-105</span><span class="who">Dev</span></div></div>
+            </div>
+            <div class="col"><div class="col-h"><span>In progress</span><b>2</b></div>
+              <div class="jcard"><span class="jkey">SAF-142</span><p>Admin review queue for uploaded documents</p><div class="jmeta"><span class="jepic">&#8627; SAF-105</span><span class="who">Dev</span></div></div>
+              <div class="jcard"><span class="jkey">SAF-145</span><p>Subscription plans page (6-month, yearly)</p><div class="jmeta"><span class="jepic">&#8627; SAF-110</span><span class="who">Dev</span></div></div>
+            </div>
+            <div class="col"><div class="col-h"><span>In review</span><b>1</b></div>
+              <div class="jcard"><span class="jkey">SAF-141</span><p>Document upload on the appointment page</p><div class="jmeta"><span class="jepic">&#8627; SAF-105</span><span class="who">BA + QA</span></div></div>
+            </div>
+            <div class="col"><div class="col-h"><span>Done</span><b>2</b></div>
+              <div class="jcard done"><span class="jkey">SAF-144</span><p>Subscription fields in the account table</p><div class="jmeta"><span class="jepic">&#8627; SAF-110</span><span class="who">Dev</span></div></div>
+              <div class="jcard done"><span class="jkey">SAF-140</span><p>Acceptance criteria and review rules written</p><div class="jmeta"><span class="jepic">&#8627; SAF-105</span><span class="who">BA</span></div></div>
+            </div>
+          </div>
+        </div>
+        <p class="bc-small">Cards are sub-tasks; the tag shows the parent story. As the BA, I write the acceptance criteria before a story enters a sprint, and I check each story against them in the "In review" column before it moves to Done.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="card"><span class="label">Definition of Ready</span><ul><li>Written as a user story with a clear "so that"</li><li>Acceptance criteria in Given / When / Then</li><li>Linked to its epic, use case and evidence</li><li>Estimated in story points by the team</li><li>No open questions for stakeholders</li></ul></div>
+        <div class="card"><span class="label">Definition of Done</span><ul><li>All acceptance criteria pass in review</li><li>Meets the related NFRs (speed, security, accessibility)</li><li>Data changes match the ERD</li><li>Demoed at the sprint review</li><li>Jira issue closed and traceability updated</li></ul></div>
+      </div>
+    </section>
+
+    <!-- 11 OUTCOME -->
+    <section id="outcome">
+      <div class="sec-head">
+        <span class="label">11 · Outcome</span>
+        <h2>What I delivered, what I learned, what comes next</h2>
+      </div>
+      <div class="grid3">
+        <div class="card"><h3>Evidence beats opinion</h3><p>Tying every story to a survey figure or interview made scope discussions shorter and prioritization easy to defend.</p></div>
+        <div class="card"><h3>Models expose gaps</h3><p>Drawing the process and data flows surfaced the admin document review before any code existed. It became a core feature.</p></div>
+        <div class="card"><h3>Say what's out</h3><p>A written out-of-scope list and a "Won't" priority kept a 6-person student team focused on the flow that mattered.</p></div>
+      </div>
+      <div class="roadmap">
+        <div><b>Now · release 1</b><ul><li>Visa guide and checklists</li><li>Document review</li><li>Appointment booking</li></ul></div>
+        <div><b>Next</b><ul><li>Themed bundles (honeymoon, adventure)</li><li>Direct airline and hotel partners</li><li>Policy-change alerts</li></ul></div>
+        <div><b>Later</b><ul><li>Government portal integration</li><li>Travel insurance and translation</li><li>Markets beyond Egypt</li></ul></div>
+      </div>
+    </section>
+
+    <section class="contact" aria-label="Contact">
+      <h2>Looking for a junior business analyst?</h2>
+      <p>I'm Yara, an enthusiastic Junior Business Analyst. I'd like to bring this kind of work to your team.</p>
+      <dl>
+        <div><dt>Email</dt><dd>yara.eissa.w@gmail.com</dd></div>
+        <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/yara-eissa-" target="_blank" rel="noopener">linkedin.com/in/yara-eissa-</a></dd></div>
+      </dl>
+      <div><a class="cv-btn" href="Yara-Eissa-CV.pdf" data-cv>View my CV</a></div>
+    </section>
+  </main>
+</div>
+
+<dialog class="viewer cv-viewer" id="cv-viewer" aria-label="Yara Eissa CV">
+  <div class="viewer-bar">
+    <b>Yara Eissa · CV</b>
+    <a class="cv-dl" href="https://drive.google.com/uc?export=download&amp;id=13e9DfJxYsqktQ3N0xXxScqFzmTWG9pca" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CV</a>
+    <button type="button" class="btn-sm" id="cv-close">Close</button>
+  </div>
+  <div class="viewer-body cv-body" id="cv-body"><p class="cv-status" id="cv-status">Loading CV…</p></div>
+</dialog>
+<dialog class="viewer" id="viewer" aria-label="Diagram viewer">
+  <div class="viewer-bar">
+    <b id="viewer-title">Diagram</b>
+    <button type="button" class="btn-sm" id="zoom-out" aria-label="Zoom out">−</button>
+    <button type="button" class="btn-sm" id="zoom-in" aria-label="Zoom in">+</button>
+    <button type="button" class="btn-sm" id="viewer-close">Close</button>
+  </div>
+  <div class="viewer-body" id="viewer-body"></div>
+</dialog>
+<button type="button" class="backtop" id="backtop" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+(function(){
+  /* CV viewer: renders the PDF inside the page (new tabs can't open files hosted with the page) */
+  var cvDlg = document.getElementById('cv-viewer'), cvBody = document.getElementById('cv-body'), cvLoaded = false;
+  function cvMessage(text){ cvBody.innerHTML = ''; var p = document.createElement('p'); p.className = 'cv-status'; p.textContent = text; cvBody.appendChild(p); }
+  function loadCv(){
+    if (cvLoaded) return;
+    if (!window.pdfjsLib) { cvMessage('The CV viewer could not load. Please try again, or ask me for my CV at yara.eissa.w@gmail.com.'); return; }
+    cvLoaded = true;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfjsLib.getDocument({ url: 'Yara-Eissa-CV.pdf' }).promise.then(function(pdf){
+      cvBody.innerHTML = '';
+      var chain = Promise.resolve();
+      for (var n = 1; n <= pdf.numPages; n++) (function(n){
+        chain = chain.then(function(){ return pdf.getPage(n); }).then(function(page){
+          var vp = page.getViewport({ scale: 2 });
+          var c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+          c.setAttribute('role', 'img'); c.setAttribute('aria-label', 'CV page ' + n);
+          cvBody.appendChild(c);
+          return page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+        });
+      })(n);
+      return chain;
+    }).catch(function(){ cvLoaded = false; cvMessage('The CV could not be displayed. Please try again, or ask me for my CV at yara.eissa.w@gmail.com.'); });
+  }
+  document.querySelectorAll('a[data-cv]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      if (cvDlg.showModal) cvDlg.showModal(); else cvDlg.setAttribute('open', '');
+      loadCv();
+    });
+  });
+  document.getElementById('cv-close').addEventListener('click', function(){ cvDlg.close ? cvDlg.close() : cvDlg.removeAttribute('open'); });
+  cvDlg.addEventListener('click', function(e){ if (e.target === cvDlg) cvDlg.close(); });
+})();
+</script>
+<script>
+(function(){
+  var fmt = function(n){ return Math.round(n).toLocaleString('en-US'); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var landing = document.getElementById('top'), topbar = document.getElementById('topbar');
+
+  /* 0. Landing: smooth scroll links and section reveal */
+  document.querySelectorAll('a[data-scroll]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      if (target === landing) window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      else target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  if ('IntersectionObserver' in window && !reduce) {
+    document.documentElement.classList.add('js-reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
+    document.querySelectorAll('main > section').forEach(function(s){ s.classList.add('reveal'); io.observe(s); });
+  }
+
+  /* 0b. Twinkling stars behind the landing text */
+  var sky = document.getElementById('stars'), ctx = sky && sky.getContext && sky.getContext('2d');
+  if (ctx) {
+    var css = getComputedStyle(document.documentElement);
+    var tints = [css.getPropertyValue('--hero-ink').trim() || '#f2e8c9', css.getPropertyValue('--hero-accent').trim() || '#a9b6ff'];
+    var stars = [], W = 0, H = 0, dpr = 1, running = false, visible = true;
+    function makeStars(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = sky.clientWidth; H = sky.clientHeight;
+      sky.width = W * dpr; sky.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.round(W * H / 3800);
+      stars = [];
+      for (var i = 0; i < n; i++) {
+        stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() < .9 ? Math.random() * .9 + .3 : Math.random() * .8 + 1.1,
+          base: Math.random() * .5 + .25, amp: Math.random() * .35, speed: Math.random() * 1.2 + .4, phase: Math.random() * 6.28,
+          c: Math.random() < .8 ? tints[0] : tints[1] });
+      }
+    }
+    function drawSky(t){
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        ctx.globalAlpha = Math.max(0, Math.min(1, s.base + (reduce ? 0 : s.amp * Math.sin(t / 1000 * s.speed + s.phase))));
+        ctx.fillStyle = s.c;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    function loop(t){ if (!visible) { running = false; return; } drawSky(t); requestAnimationFrame(loop); }
+    function start(){ if (reduce) { drawSky(0); return; } if (!running) { running = true; requestAnimationFrame(loop); } }
+    makeStars(); start();
+    var rz;
+    window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ makeStars(); drawSky(performance.now()); }, 150); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(en){ visible = en[0].isIntersecting; if (visible) start(); }).observe(landing);
+    }
+  }
+
+  /* 1. Labels for stacked tables on small screens */
+  document.querySelectorAll('table.spec, table.money').forEach(function(t){
+    var heads = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent.trim(); });
+    t.querySelectorAll('tbody tr').forEach(function(tr){
+      Array.prototype.forEach.call(tr.children, function(td, i){ if (heads[i]) td.setAttribute('data-label', heads[i]); });
+    });
+  });
+
+  /* 2. Highlight the current section in both navs */
+  var links = document.querySelectorAll('nav.index a, .mnav a');
+  var sections = Array.prototype.map.call(document.querySelectorAll('nav.index a'), function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  function setActive(id){
+    links.forEach(function(a){
+      var on = a.getAttribute('href') === '#' + id;
+      a.classList.toggle('active', on);
+      if (on && a.parentElement.classList.contains('mnav')) {
+        var bar = a.parentElement, left = a.offsetLeft - bar.clientWidth / 2 + a.clientWidth / 2;
+        bar.scrollTo({ left: left, behavior: 'auto' });
+      }
+    });
+  }
+  function onScroll(){
+    var y = window.scrollY + window.innerHeight * 0.3, current = sections[0];
+    sections.forEach(function(s){ if (s.offsetTop <= y) current = s; });
+    if (current) setActive(current.id);
+    var past = window.scrollY > landing.offsetTop + landing.offsetHeight - 60;
+    topbar.classList.toggle('show', past);
+    document.getElementById('backtop').classList.toggle('show', past);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  document.getElementById('backtop').addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+
+  /* 3. Filter the backlog by priority and text */
+  var backlog = document.querySelector('#backlog table.spec');
+  if (backlog) {
+    var rows = Array.prototype.slice.call(backlog.querySelectorAll('tbody tr'));
+    rows.forEach(function(r){ var p = r.querySelector('.pri'); r.dataset.pri = p ? p.textContent.trim().split(' ')[0].replace('’',"'") : ''; });
+    var bar = document.createElement('div');
+    bar.className = 'filters';
+    var groups = ['All', 'Must', 'Should', 'Could', "Won't"];
+    groups.forEach(function(g){
+      var n = g === 'All' ? rows.length : rows.filter(function(r){ return r.dataset.pri === g; }).length;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn-sm'; b.dataset.pri = g;
+      b.textContent = g + ' (' + n + ')';
+      b.setAttribute('aria-pressed', g === 'All' ? 'true' : 'false');
+      bar.appendChild(b);
+    });
+    var search = document.createElement('input');
+    search.type = 'search'; search.className = 'search'; search.id = 'backlog-search';
+    search.placeholder = 'Search stories, e.g. "document"'; search.setAttribute('aria-label', 'Search user stories');
+    bar.appendChild(search);
+    var count = document.createElement('span'); count.className = 'count'; count.setAttribute('aria-live', 'polite');
+    bar.appendChild(count);
+    backlog.closest('.table-wrap').before(bar);
+    var empty = document.createElement('tr'); empty.className = 'empty-row'; empty.innerHTML = '<td colspan="5">No stories match this filter.</td>'; empty.hidden = true;
+    backlog.querySelector('tbody').appendChild(empty);
+    var active = 'All';
+    function apply(){
+      var q = search.value.trim().toLowerCase(), shown = 0;
+      rows.forEach(function(r){
+        var ok = (active === 'All' || r.dataset.pri === active) && (!q || r.textContent.toLowerCase().indexOf(q) > -1);
+        r.hidden = !ok; if (ok) shown++;
+      });
+      empty.hidden = shown > 0;
+      count.textContent = 'Showing ' + shown + ' of ' + rows.length + ' stories';
+    }
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-pri]'); if (!b) return;
+      active = b.dataset.pri;
+      bar.querySelectorAll('button[data-pri]').forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      apply();
+    });
+    search.addEventListener('input', apply);
+    apply();
+  }
+
+  /* 4. Open any diagram full size */
+  var viewer = document.getElementById('viewer'), vbody = document.getElementById('viewer-body'), zoom = 1, vsvg = null;
+  function setZoom(z){ zoom = Math.max(0.6, Math.min(3, z)); if (vsvg) vsvg.style.width = (zoom * 100) + '%'; }
+  document.querySelectorAll('figure .dg-wrap').forEach(function(w){
+    var svg = w.querySelector('svg'); if (!svg) return;
+    var cap = w.parentElement.querySelector('figcaption b');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'expand'; btn.textContent = 'Expand ⤢';
+    btn.setAttribute('aria-label', 'Open ' + (cap ? cap.textContent : 'diagram') + ' full size');
+    btn.addEventListener('click', function(){
+      vbody.innerHTML = '';
+      vsvg = svg.cloneNode(true);
+      vsvg.querySelectorAll('[id]').forEach(function(el){ el.id = 'v-' + el.id; });
+      vsvg.querySelectorAll('[marker-end]').forEach(function(el){ el.setAttribute('marker-end', el.getAttribute('marker-end').replace('url(#', 'url(#v-')); });
+      vbody.appendChild(vsvg);
+      document.getElementById('viewer-title').textContent = cap ? cap.textContent.replace(/\.$/, '') : 'Diagram';
+      setZoom(window.innerWidth < 700 ? 1.8 : 1);
+      if (viewer.showModal) viewer.showModal(); else viewer.setAttribute('open', '');
+    });
+    w.parentElement.insertBefore(btn, w);
+  });
+  document.getElementById('zoom-in').addEventListener('click', function(){ setZoom(zoom + 0.25); });
+  document.getElementById('zoom-out').addEventListener('click', function(){ setZoom(zoom - 0.25); });
+  document.getElementById('viewer-close').addEventListener('click', function(){ viewer.close ? viewer.close() : viewer.removeAttribute('open'); });
+  viewer.addEventListener('click', function(e){ if (e.target === viewer) viewer.close(); });
+
+  /* 5. Break-even calculator */
+  var COST = 292328.75, NS = 'http://www.w3.org/2000/svg';
+  var chart = document.getElementById('be-chart');
+  var inSubs = document.getElementById('in-subs'), inPrice = document.getElementById('in-price'), inVat = document.getElementById('in-vat');
+  function el(tag, attrs, text){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; chart.appendChild(e); return e; }
+  function niceStep(v){ var m = Math.pow(10, Math.floor(Math.log10(v))), r = v / m; return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 2.5 ? 2.5 : r <= 5 ? 5 : 10) * m; }
+  function kfmt(v){ return v >= 1e6 ? (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : v >= 1000 ? Math.round(v / 1000) + 'k' : '0'; }
+  function update(){
+    var subs = +inSubs.value, price = +inPrice.value, vat = inVat.checked;
+    var rev = vat ? subs * price / 1.14 : subs * price;
+    var months = COST / rev, month = Math.ceil(months);
+    document.getElementById('out-subs').textContent = subs;
+    document.getElementById('out-price').textContent = price;
+    document.getElementById('res-rev').textContent = fmt(rev);
+    document.getElementById('res-months').textContent = months.toFixed(1);
+    document.getElementById('res-month').textContent = 'Month ' + month;
+    document.getElementById('be-caption').textContent = months <= 12
+      ? 'Revenue so far passes the 292,329 EGP total cost at ' + months.toFixed(1) + ' months, during month ' + month + '.'
+      : 'At this rate the cost is not recovered within the first year (' + months.toFixed(1) + ' months).';
+
+    chart.innerHTML = '';
+    var L = 52, R = 544, T = 16, B = 236, span = 12;
+    var step = niceStep(Math.max(COST * 1.35, rev * span) / 4), ymax = step * 4;
+    var x = function(m){ return L + (R - L) * m / span; }, y = function(v){ return B - (B - T) * Math.min(v, ymax) / ymax; };
+    for (var i = 0; i <= 4; i++) {
+      var v = step * i;
+      el('line', { class: 'grid', x1: L, y1: y(v), x2: R, y2: y(v) });
+      el('text', { class: 'sm', x: L - 8, y: y(v) + 4, 'text-anchor': 'end' }, kfmt(v));
+    }
+    for (var m = 0; m <= span; m += 2) el('text', { class: 'sm', x: x(m), y: B + 18, 'text-anchor': 'middle' }, m);
+    el('text', { class: 'sm', x: (L + R) / 2, y: B + 38, 'text-anchor': 'middle' }, 'Months after launch · EGP');
+    el('line', { class: 'ln', x1: L, y1: y(COST), x2: R, y2: y(COST), 'stroke-width': 2 });
+    el('text', { class: 'sm', x: R - 4, y: y(COST) - 8, 'text-anchor': 'end' }, 'Total cost 292,329');
+    var endM = Math.min(span, ymax / rev);
+    el('line', { class: 'lnA', x1: x(0), y1: y(0), x2: x(endM), y2: y(rev * endM), 'stroke-width': 2.5 });
+    if (months <= span) {
+      el('line', { class: 'grid', x1: x(months), y1: y(COST), x2: x(months), y2: B, 'stroke-dasharray': '4 4' });
+      el('circle', { class: 'dotA', cx: x(months), cy: y(COST), r: 6 });
+      var right = months < 8;
+      el('text', { class: 'b', x: x(months) + (right ? 10 : -10), y: y(COST) + 22, 'text-anchor': right ? 'start' : 'end', style: 'font-size:12px' }, 'Break-even: month ' + month);
+    }
+    for (var k = 1; k <= span; k++) {
+      var val = rev * k; if (val > ymax) break;
+      var c = el('circle', { class: 'hit', cx: x(k), cy: y(val), r: 9 });
+      var t = document.createElementNS(NS, 'title'); t.textContent = 'Month ' + k + ': ' + fmt(val) + ' EGP (' + (val >= COST ? '+' : '−') + fmt(Math.abs(val - COST)) + ' vs cost)'; c.appendChild(t);
+    }
+  }
+  [inSubs, inPrice, inVat].forEach(function(i){ i.addEventListener('input', update); });
+  document.getElementById('calc-reset').addEventListener('click', function(){ inSubs.value = 200; inPrice.value = 200; inVat.checked = false; update(); });
+  update();
+})();
+</script>
+
+</body>
+</html>
