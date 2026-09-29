@@ -1160,6 +1160,8 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
   document.querySelectorAll('a[data-cv]').forEach(function(a){
     a.addEventListener('click', function(e){
       e.preventDefault();
+      /* Opened as a local file: browsers block pdf.js from reading file:// URLs, so use the browser's own PDF viewer */
+      if (location.protocol === 'file:') { window.open(a.href, '_blank'); return; }
       if (cvDlg.showModal) cvDlg.showModal(); else cvDlg.setAttribute('open', '');
       loadCv();
     });
