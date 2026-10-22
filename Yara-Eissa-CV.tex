@@ -1,0 +1,111 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[a4paper,left=33.84pt,right=38.16pt,top=36pt,bottom=30pt]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tabularx}
+
+\pagestyle{empty}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\parindent}{0pt}
+
+% Section formatting
+\titleformat{\section}{\scshape\raggedright\large}{}{0em}{}[\vspace{-10pt}\rule{\textwidth}{0.4pt}]
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+
+% Custom commands
+\newcommand{\resumeItem}[2]{%
+  \item\small{\textbf{#1}: #2\vspace{-2pt}}}
+
+\newcommand{\resumeSubheading}[4]{%
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{#3} & \textit{#4} \\
+    \end{tabular*}\vspace{-5pt}}
+
+\newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*,itemsep=6pt,topsep=0pt]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[label=--,itemsep=0pt,topsep=4pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+  {\LARGE \textbf{Yara Eissa}} \\[4pt]
+  \small
+  \href{mailto:yara.eissa.w@gmail.com}{yara.eissa.w@gmail.com} ~$\cdot$~
+  Cairo, Egypt ~$\cdot$~
+  \href{tel:+201024308671}{+20 1024308671} \\[5pt]
+  \normalsize
+  \textbf{Portfolio: \href{https://yara-eissa-portfolio.vercel.app}{yara-eissa-portfolio.vercel.app}} \\[10pt]
+  Driven by passion to bridge technology and business needs
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \textbf{Arab Academy for Science Technology and Maritime Transport} \hfill Cairo, Egypt \\
+  Bachelor Degree in Business Administration - GPA: 3.82/4.0 with honors \hfill \textit{Oct 2020 -- Jun 2024} \\[3pt]
+  Major: Business Information Systems College of Management and Technology \\[5pt]
+  \textit{Relevant Courses:} System Analysis and Design, System Documentation, Requirement Gathering,BI, Intelligent Computing, Project Management, Decision Support Systems.
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Property Management Systems Installer}{Cairo,Egypt}
+      {Advanced Computer Technology (ACT)}{November 2025 -- Present}
+      \resumeItemListStart
+        \item Configured and deployed Oracle Opera Cloud, aligning the system with operational needs
+        \item Coordinated with vendors to configure and test system integrations, ensuring seamless data exchange
+        \item Delivered training to 100+ users, enhancing system adoption and reducing on-boarding time
+        \item Supported critical Go-Live deployments, providing real-time troubleshooting
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+  \resumeSubHeadingListStart
+    \resumeSubItem{Graduation Project: Safarny System and Website}
+      {\\Responsibilities: Project Leader, SDLC, user research, market analysis, system analysis, system design, data gathering, data scraping, backend development.\\[3pt]
+      Tools: Python -- MySQL -- UML -- BRD -- Agile -- HTML -- CSS -- JavaScript -- PHP}
+    \resumeSubItem{Data Analysis \& Visualization Projects}
+      {\\Analyzed business datasets using Tableau and Power BI to identify trends and generate actionable insights. Developed dashboards and reports to support decision-making across areas including HR and education technology.}
+    \resumeSubItem{International Volunteering System and Website}
+      {\\Responsibilities: Full Stack Developer , Requirements gathering , Structural \& Behavioral Data Modeling, Project Management.\\[3pt]
+      Tools: Microsoft Project -- PHP -- HTML -- CSS -- JavaScript}
+    \resumeSubItem{Mobile Prototyping : Mental Health App}
+      {\\Focused on aligning features with user needs and wellness goals. Documented the user journey and value proposition to support future product development.}
+    \resumeSubItem{ODOO ERP System Implementation}
+      {\\Explored ERP implementation in a retail business context. Analyzed operations to identify process improvements}
+  \resumeSubHeadingListEnd
+  \vspace{4pt}
+
+%-----------SKILLS-----------
+\section{Skills Summary}
+  \begin{tabularx}{\textwidth}{@{}p{134.5pt}X@{}}
+    \textbf{Technical Skills:} & Data Analysis -- SQL -- Tableau -- Power BI - Jira - Python -- PHP -- Microsoft Project -- HTML/CSS -- JavaScript \\ \noalign{\vspace{5pt}}
+    \textbf{Technical Documentation :} & System Documentation -- Functional Specifications -- Requirements Gathering -- Process Mapping -- Gap Analysis -- Feasibility Analysis -- Project Management -- Gantt chart -- UseCases -- User Stories -- BRDs -- Data Modeing \\ \noalign{\vspace{5pt}}
+    \textbf{Soft Skills:} & Analytical Thinking -- Organization skills -- Communication -- Problem Solving -- Flexibility -- Teamwork \\
+  \end{tabularx}
+
+%-----------EXTRACURRICULAR-----------
+\section{Extracurricular Activities}
+  \begin{itemize}[leftmargin=*,itemsep=2pt,topsep=0pt]
+    \item \textbf{Youth Assembly Delegate -- New York, USA (Aug 2023)} \hfill \textit{Scholarship recipient}
+    \item \textbf{Changemakers Workshop -- University of Pennsylvania (Aug 2023)} \hfill \textit{Scholarship recipient}
+    \item \textbf{Volunteer -- AFS Egypt (2019--Present)}.
+    \item \textbf{BP Global STEM Academy -- Brazil (2019)} \hfill \textit{Scholarship recipient}
+    \item \textbf{Young Member -- New York Academy of Sciences (2018--2019)}.
+    \item \textbf{International Volunteer Day Speaker -- AFS Egypt (Dec 2022)}.
+  \end{itemize}
+
+\end{document}
