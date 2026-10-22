@@ -450,7 +450,7 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
 
 <div class="shell">
   <nav class="mnav" aria-label="Jump to section">
-    <a href="#overview">Overview</a><a href="#problem">Problem</a><a href="#stakeholders">Stakeholders</a><a href="#discovery">Discovery</a><a href="#process">As-is / to-be</a><a href="#scope">Scope</a><a href="#backlog">Requirements</a><a href="#models">Models</a><a href="#business-case">Business case</a><a href="#risks">Risks</a><a href="#delivery">Jira</a><a href="#outcome">Outcome</a>
+    <a href="#overview">Overview</a><a href="#problem">Problem</a><a href="#stakeholders">Stakeholders</a><a href="#discovery">Discovery</a><a href="#process">As-is / to-be</a><a href="#scope">Scope</a><a href="#backlog">Requirements</a><a href="#models">Models</a><a href="#risks">Risks</a><a href="#delivery">Jira</a><a href="#outcome">Outcome</a>
   </nav>
   <nav class="index" aria-label="Case study sections">
     <span class="label" style="margin-bottom:8px">Case study</span>
@@ -462,10 +462,9 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
     <a href="#scope"><span>05</span>Scope</a>
     <a href="#backlog"><span>06</span>Requirements</a>
     <a href="#models"><span>07</span>System models</a>
-    <a href="#business-case"><span>08</span>Business case</a>
-    <a href="#risks"><span>09</span>Risks</a>
-    <a href="#delivery"><span>10</span>Delivery &amp; Jira</a>
-    <a href="#outcome"><span>11</span>Outcome</a>
+    <a href="#risks"><span>08</span>Risks</a>
+    <a href="#delivery"><span>09</span>Delivery &amp; Jira</a>
+    <a href="#outcome"><span>10</span>Outcome</a>
   </nav>
 
   <main>
@@ -487,7 +486,7 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
         <div><span class="label">Result</span><b>A validated, costed solution</b>96.8% of respondents wanted this product. A working website prototype was built on the design, with break-even forecast in month 8.</div>
       </div>
       <div class="chips" aria-label="Deliverables">
-        <span class="chip">Stakeholder map</span><span class="chip">Personas</span><span class="chip">BPMN as-is / to-be</span><span class="chip">Gap analysis</span><span class="chip">Context diagram</span><span class="chip">User stories + Gherkin</span><span class="chip">MoSCoW backlog</span><span class="chip">Traceability</span><span class="chip">UML use case &amp; sequence</span><span class="chip">ERD</span><span class="chip">Business case</span><span class="chip">Risk register</span><span class="chip">Gantt plan</span><span class="chip">Jira epics &amp; sprints</span>
+        <span class="chip">Stakeholder map</span><span class="chip">Personas</span><span class="chip">BPMN as-is / to-be</span><span class="chip">Gap analysis</span><span class="chip">Context diagram</span><span class="chip">User stories + Gherkin</span><span class="chip">MoSCoW backlog</span><span class="chip">Traceability</span><span class="chip">UML use case &amp; sequence</span><span class="chip">ERD</span><span class="chip">Risk register</span><span class="chip">Gantt plan</span><span class="chip">Jira epics &amp; sprints</span>
       </div>
       <p class="note">Originally delivered in 2024 as a BRD with UML models and user stories with acceptance criteria. Revisited in 2026 with the artifacts BA teams use today: BPMN, MoSCoW prioritization, measurable NFRs and KPIs. <b>Every diagram on this page has been redrawn.</b></p>
     </section>
@@ -921,66 +920,10 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
       </figure>
     </section>
 
-    <!-- 08 BUSINESS CASE -->
-    <section id="business-case">
-      <div class="sec-head">
-        <span class="label">08 · Business case</span>
-        <h2>Pays back in month 8</h2>
-        <p>I sized the build with use case points, priced it, and tested it against a subscription forecast. All amounts in EGP.</p>
-      </div>
-      <ol class="chain">
-        <li><span class="label">Size</span><b>59.55</b><span>use case points</span></li>
-        <li><span class="label">Total cost</span><b>292,329</b><span>build 157,329 + first-year running 135,000</span></li>
-        <li><span class="label">Revenue</span><b>40,000 / mo</b><span>200 subscribers × 200 EGP</span></li>
-        <li class="end"><span class="label">Break-even</span><b>Month 8</b><span>292,329 ÷ 40,000 = 7.3 months</span></li>
-      </ol>
-
-      <div class="calc-box" id="calculator">
-        <div class="calc-head">
-          <h3>Try the assumptions</h3>
-          <button type="button" class="btn-sm" id="calc-reset">Reset to plan</button>
-        </div>
-        <div class="calc-grid">
-          <div class="controls">
-            <label for="in-subs"><span>New subscribers per month</span><output id="out-subs">200</output></label>
-            <input type="range" id="in-subs" min="50" max="400" step="10" value="200">
-            <label for="in-price"><span>Subscription price (EGP)</span><output id="out-price">200</output></label>
-            <input type="range" id="in-price" min="100" max="400" step="10" value="200">
-            <label class="check" for="in-vat"><input type="checkbox" id="in-vat"><span>Price already includes 14% VAT</span></label>
-            <dl class="results">
-              <div><dt>Revenue kept / month</dt><dd id="res-rev">40,000</dd></div>
-              <div><dt>Months to recover 292,329</dt><dd id="res-months">7.3</dd></div>
-              <div class="hl-res"><dt>Break-even</dt><dd id="res-month">Month 8</dd></div>
-            </dl>
-          </div>
-          <figure class="calc-chart">
-            <svg class="dg" id="be-chart" viewBox="0 0 560 280" role="img" aria-label="Break-even chart: revenue so far against the total cost of 292,329 EGP."></svg>
-            <figcaption id="be-caption">Revenue so far passes the total cost at 7.3 months, during month 8.</figcaption>
-          </figure>
-        </div>
-        <p class="note">Subscriptions only; commission and referral income are left out, which keeps the forecast conservative. The full working (use case points, cost table, month-by-month balance and scenarios) is in a separate Excel workbook, available on request.</p>
-      </div>
-
-      <details class="more">
-        <summary>Business model canvas</summary>
-        <div class="canvas" aria-label="Business model canvas">
-          <div class="c-kp"><span class="label">Key partners</span>Travel agencies<br>Embassies</div>
-          <div class="c-ka"><span class="label">Key activities</span>Visa content upkeep, document review, platform operations</div>
-          <div class="c-kr"><span class="label">Key resources</span>Visa database, developers, marketers</div>
-          <div class="c-vp"><span class="label">Value proposition</span>Clear visa guidance, document checklists and sources, pre-checked applications, appointment booking, budget travel bundles</div>
-          <div class="c-cr"><span class="label">Relationships</span>Email, customer support, personalization</div>
-          <div class="c-ch"><span class="label">Channels</span>Website, mobile app</div>
-          <div class="c-cs"><span class="label">Segments</span>Egyptian travelers aged 16–70 (students, first-time travelers, businesspeople); travel agencies</div>
-          <div class="c-cost"><span class="label">Cost structure</span>Development, marketing (SEO, social ads), workspace, maintenance</div>
-          <div class="c-rev"><span class="label">Revenue streams</span>Subscriptions, 8% user commission, agency referrals</div>
-        </div>
-      </details>
-    </section>
-
-    <!-- 09 RISKS -->
+    <!-- 08 RISKS -->
     <section id="risks">
       <div class="sec-head">
-        <span class="label">09 · Risks</span>
+        <span class="label">08 · Risks</span>
         <h2>Risk register</h2>
         <p>Built from the SWOT's weaknesses and threats. The top risk is the product's own promise: information that goes out of date.</p>
       </div>
@@ -998,10 +941,10 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
       </div>
     </section>
 
-    <!-- 10 DELIVERY -->
+    <!-- 09 DELIVERY -->
     <section id="delivery">
       <div class="sec-head">
-        <span class="label">10 · Delivery</span>
+        <span class="label">09 · Delivery</span>
         <h2>Phases for the milestones, sprints in Jira for the build</h2>
         <p>Each semester was a fixed university milestone, so the overall plan is phased and scheduled in Microsoft Project. I owned the business analysis tasks in Planning and Analysis: market analysis, stakeholders, feasibility and the business model. The build itself is managed in Jira.</p>
       </div>
@@ -1082,10 +1025,10 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
       </div>
     </section>
 
-    <!-- 11 OUTCOME -->
+    <!-- 10 OUTCOME -->
     <section id="outcome">
       <div class="sec-head">
-        <span class="label">11 · Outcome</span>
+        <span class="label">10 · Outcome</span>
         <h2>What I delivered, what I learned, what comes next</h2>
       </div>
       <div class="grid3">
@@ -1337,56 +1280,6 @@ body::after{background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3
   document.getElementById('viewer-close').addEventListener('click', function(){ viewer.close ? viewer.close() : viewer.removeAttribute('open'); });
   viewer.addEventListener('click', function(e){ if (e.target === viewer) viewer.close(); });
 
-  /* 5. Break-even calculator */
-  var COST = 292328.75, NS = 'http://www.w3.org/2000/svg';
-  var chart = document.getElementById('be-chart');
-  var inSubs = document.getElementById('in-subs'), inPrice = document.getElementById('in-price'), inVat = document.getElementById('in-vat');
-  function el(tag, attrs, text){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; chart.appendChild(e); return e; }
-  function niceStep(v){ var m = Math.pow(10, Math.floor(Math.log10(v))), r = v / m; return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 2.5 ? 2.5 : r <= 5 ? 5 : 10) * m; }
-  function kfmt(v){ return v >= 1e6 ? (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : v >= 1000 ? Math.round(v / 1000) + 'k' : '0'; }
-  function update(){
-    var subs = +inSubs.value, price = +inPrice.value, vat = inVat.checked;
-    var rev = vat ? subs * price / 1.14 : subs * price;
-    var months = COST / rev, month = Math.ceil(months);
-    document.getElementById('out-subs').textContent = subs;
-    document.getElementById('out-price').textContent = price;
-    document.getElementById('res-rev').textContent = fmt(rev);
-    document.getElementById('res-months').textContent = months.toFixed(1);
-    document.getElementById('res-month').textContent = 'Month ' + month;
-    document.getElementById('be-caption').textContent = months <= 12
-      ? 'Revenue so far passes the 292,329 EGP total cost at ' + months.toFixed(1) + ' months, during month ' + month + '.'
-      : 'At this rate the cost is not recovered within the first year (' + months.toFixed(1) + ' months).';
-
-    chart.innerHTML = '';
-    var L = 52, R = 544, T = 16, B = 236, span = 12;
-    var step = niceStep(Math.max(COST * 1.35, rev * span) / 4), ymax = step * 4;
-    var x = function(m){ return L + (R - L) * m / span; }, y = function(v){ return B - (B - T) * Math.min(v, ymax) / ymax; };
-    for (var i = 0; i <= 4; i++) {
-      var v = step * i;
-      el('line', { class: 'grid', x1: L, y1: y(v), x2: R, y2: y(v) });
-      el('text', { class: 'sm', x: L - 8, y: y(v) + 4, 'text-anchor': 'end' }, kfmt(v));
-    }
-    for (var m = 0; m <= span; m += 2) el('text', { class: 'sm', x: x(m), y: B + 18, 'text-anchor': 'middle' }, m);
-    el('text', { class: 'sm', x: (L + R) / 2, y: B + 38, 'text-anchor': 'middle' }, 'Months after launch · EGP');
-    el('line', { class: 'ln', x1: L, y1: y(COST), x2: R, y2: y(COST), 'stroke-width': 2 });
-    el('text', { class: 'sm', x: R - 4, y: y(COST) - 8, 'text-anchor': 'end' }, 'Total cost 292,329');
-    var endM = Math.min(span, ymax / rev);
-    el('line', { class: 'lnA', x1: x(0), y1: y(0), x2: x(endM), y2: y(rev * endM), 'stroke-width': 2.5 });
-    if (months <= span) {
-      el('line', { class: 'grid', x1: x(months), y1: y(COST), x2: x(months), y2: B, 'stroke-dasharray': '4 4' });
-      el('circle', { class: 'dotA', cx: x(months), cy: y(COST), r: 6 });
-      var right = months < 8;
-      el('text', { class: 'b', x: x(months) + (right ? 10 : -10), y: y(COST) + 22, 'text-anchor': right ? 'start' : 'end', style: 'font-size:12px' }, 'Break-even: month ' + month);
-    }
-    for (var k = 1; k <= span; k++) {
-      var val = rev * k; if (val > ymax) break;
-      var c = el('circle', { class: 'hit', cx: x(k), cy: y(val), r: 9 });
-      var t = document.createElementNS(NS, 'title'); t.textContent = 'Month ' + k + ': ' + fmt(val) + ' EGP (' + (val >= COST ? '+' : '−') + fmt(Math.abs(val - COST)) + ' vs cost)'; c.appendChild(t);
-    }
-  }
-  [inSubs, inPrice, inVat].forEach(function(i){ i.addEventListener('input', update); });
-  document.getElementById('calc-reset').addEventListener('click', function(){ inSubs.value = 200; inPrice.value = 200; inVat.checked = false; update(); });
-  update();
 })();
 </script>
 
